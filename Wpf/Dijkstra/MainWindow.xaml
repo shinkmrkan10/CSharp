@@ -8,13 +8,33 @@
         Title="MainWindow" Height="640" Width="840">
 <ScrollViewer VerticalScrollBarVisibility="Visible">
 <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="2*"/>
-        </Grid.ColumnDefinitions>
-<StackPanel Margin="10" Grid.Column="0">
-<ListView ItemsSource="{Binding}" x:Name="listViewNode" Margin="30,30,0,0">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="2*"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="2*"/>
+    </Grid.ColumnDefinitions>
+    <StackPanel Margin="10" Grid.Row="0 " Grid.Column="0" >
+        <DataGrid ItemsSource="{Binding}" x:Name="dataGrid1" HeadersVisibility="None" />
+    </StackPanel>
+    <StackPanel Margin="10" Grid.Row="0 " Grid.Column="1" >
+        <Button Name="sw_show" Background="Pink" 
+            Margin = "10"
+            Width = "80"
+            Height = "30"
+            BorderBrush="Black" BorderThickness="1" 
+            Click="button1_Click" ClickMode="Press">
+            Refresh data
+        </Button>
+    </StackPanel>
+    <StackPanel Margin="10" Grid.Row="0 " Grid.Column="2" >
+        <DataGrid ItemsSource="{Binding}" x:Name="dataGrid2" HeadersVisibility="None" />
+    </StackPanel>
+    <StackPanel Margin="10" Grid.Row="1" Grid.Column="0">
+        <ListView ItemsSource="{Binding}" x:Name="listViewNode" Margin="30,30,0,0">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Number" DisplayMemberBinding="{Binding Path=num}" Width="30">
@@ -33,18 +53,10 @@
                     <GridViewColumn Header="from" DisplayMemberBinding="{Binding Path=from}" Width="30"/>
                 </GridView>
             </ListView.View>
-</ListView>
-            <Button Name="sw_show" Background="Pink" 
-                Margin = "50"
-                Width = "120"
-                Height = "30"
-                BorderBrush="Black" BorderThickness="1" 
-                Click="button1_Click" ClickMode="Press">
-                Refresh data
-            </Button>
-</StackPanel>
-<StackPanel Margin="10" Grid.Column="1">
-<ListView ItemsSource="{Binding}" x:Name="listViewEdge" Margin="30,30,0,0">
+        </ListView>
+    </StackPanel>
+    <StackPanel Margin="10" Grid.Row="1" Grid.Column="1">
+        <ListView ItemsSource="{Binding}" x:Name="listViewEdge" Margin="30,30,0,0">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="From" DisplayMemberBinding="{Binding Path=from}" Width="30"/>
@@ -52,10 +64,10 @@
                     <GridViewColumn Header="cost" DisplayMemberBinding="{Binding Path=cost}" Width="30"/>
                 </GridView>
             </ListView.View>
-</ListView>
-</StackPanel>
-<StackPanel Margin="10" Grid.Column="2">
-<ListView ItemsSource="{Binding}" x:Name="listViewDijk" Margin="30,30,0,0">
+        </ListView>
+    </StackPanel>
+    <StackPanel Margin="10" Grid.Row="1" Grid.Column="2">
+        <ListView ItemsSource="{Binding}" x:Name="listViewDijk" Margin="30,30,0,0">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Number" DisplayMemberBinding="{Binding Path=num}" Width="30"/>
@@ -66,9 +78,8 @@
                     <GridViewColumn Header="from" DisplayMemberBinding="{Binding Path=from}" Width="40"/>
                 </GridView>
             </ListView.View>
-</ListView>
-</StackPanel>
+        </ListView>
+    </StackPanel>
 </Grid>
 </ScrollViewer>
-
 </Window>

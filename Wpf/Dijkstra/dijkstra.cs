@@ -20,12 +20,15 @@ using System.Windows.Media;
         public ObservableCollection<Edge> DataE { get; set; }
         public ObservableCollection<Node> DataN { get; set; }
         public ObservableCollection<Node> DataNew { get; set; }
+        public ObservableCollection<Maze> DataM { get; set; }
+
  
         // コンストラクタ
         public DijkstraC() {
             DataE = new ObservableCollection<Edge>();
             DataN = new ObservableCollection<Node>();
             DataNew = new ObservableCollection<Node>();
+            DataM = new ObservableCollection<Maze>();
         // (データ入力:ノード)
 			for(int j = 0; j < HEIGHT; j++){
 				for(int i = 0; i < WIDTH; i++){
@@ -150,7 +153,135 @@ using System.Windows.Media;
 				}
 			}
 
+		// Maze cost data(DataM) 作成
+			for(int j=0;j<HEIGHT;j++){
+				int n = j * WIDTH;
+				DataM.Add(new Maze{ c0=n,
+									c1=n+1,
+									c2=n+2,
+									c3=n+3,
+									c4=n+4,
+									c5=n+5,
+									c6=n+6,
+									c7=n+7,
+									c8=n+8
+									}
+				);
+			}
+
+		// Maze cost data(DataM) 更新
+			var item1 = DataN.FirstOrDefault(x => x.num == 0);
+			var item2 = DataM.FirstOrDefault(y => y.c0 == 0);
+			for(int j = 0; j < HEIGHT; j++){
+				int n = j * WIDTH;
+				item2 = DataM.FirstOrDefault(y => y.c0 == n);
+				if (item2 != null)
+				{
+				//	for(int i=0;i<WIDTH;i++){
+					//	var cnum = $"c{i}";
+						item1 = DataN.FirstOrDefault(x => x.num==n);
+						if (item1 != null)
+						{
+						    item2.c0 = item1.cost;
+						}
+						n++;
+						item1 = DataN.FirstOrDefault(x => x.num==n);
+						if (item1 != null)
+						{
+						    item2.c1 = item1.cost;
+						}
+						n++;
+						item1 = DataN.FirstOrDefault(x => x.num==n);
+						if (item1 != null)
+						{
+						    item2.c2 = item1.cost;
+						}
+						n++;
+						item1 = DataN.FirstOrDefault(x => x.num==n);
+						if (item1 != null)
+						{
+						    item2.c3 = item1.cost;
+						}
+						n++;
+						item1 = DataN.FirstOrDefault(x => x.num==n);
+						if (item1 != null)
+						{
+						    item2.c4 = item1.cost;
+						}
+						n++;
+						item1 = DataN.FirstOrDefault(x => x.num==n);
+						if (item1 != null)
+						{
+						    item2.c5 = item1.cost;
+						}
+						n++;
+						item1 = DataN.FirstOrDefault(x => x.num==n);
+						if (item1 != null)
+						{
+						    item2.c6 = item1.cost;
+						}
+						n++;
+						item1 = DataN.FirstOrDefault(x => x.num==n);
+						if (item1 != null)
+						{
+						    item2.c7 = item1.cost;
+						}
+						n++;
+						item1 = DataN.FirstOrDefault(x => x.num==n);
+						if (item1 != null)
+						{
+						    item2.c8 = item1.cost;
+						}
+			
+				//	}
+				}
+			}
+		// INF -> -1 変換
+		// スタートノード(cost=-1 for cost==INF)設定:foreach
+		    foreach (Maze d in DataM)
+		    {
+		      	if (d.c0 == INF){
+		        d.c0 = -1;
+				}
+		      	if (d.c1 == INF){
+		        d.c1 = -1;
+				}
+		      	if (d.c2 == INF){
+		        d.c2 = -1;
+				}
+		      	if (d.c3 == INF){
+		        d.c3 = -1;
+				}
+		      	if (d.c4 == INF){
+		        d.c4 = -1;
+				}
+		      	if (d.c5 == INF){
+		        d.c5 = -1;
+				}
+		      	if (d.c6 == INF){
+		        d.c6 = -1;
+				}
+		      	if (d.c7 == INF){
+		        d.c7 = -1;
+				}
+		      	if (d.c8 == INF){
+		        d.c8 = -1;
+				}
+		    }
+
+				
+		}
+
+
 /*
+			var item = DataN.FirstOrDefault(i => i.num == 0);
+			if (item != null)
+			{
+			    item.cost = 0;
+			}
+
+
+
         // メイン
         private void CreateDataGrid()
         {
@@ -263,4 +394,4 @@ using System.Windows.Media;
 
 
 		}		
-	}
+
