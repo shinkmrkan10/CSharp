@@ -37,13 +37,14 @@
         <ListView ItemsSource="{Binding}" x:Name="listViewNode" Margin="30,30,0,0">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Number" DisplayMemberBinding="{Binding Path=num}" Width="30">
-                    <GridViewColumn.HeaderContainerStyle>
-                        <Style TargetType="{x:Type GridViewColumnHeader}">
-                        <Setter Property="Background" Value="DarkBlue" />
-                        <Setter Property="Foreground" Value="White" />
-                        <Setter Property="FontWeight" Value="Bold" />
-                        </Style>
+                    <GridViewColumn Header="Number" DisplayMemberBinding="{Binding Path=num}" 
+                    Width="30">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="Background" Value="DarkBlue" />
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                            </Style>
                         </GridViewColumn.HeaderContainerStyle>
                     </GridViewColumn>
                     <GridViewColumn Header="x" DisplayMemberBinding="{Binding Path=x}" Width="30"/>

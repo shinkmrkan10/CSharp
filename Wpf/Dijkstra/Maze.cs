@@ -8,4 +8,13 @@ public class Maze {
         public int c6 { get; set; }
         public int c7 { get; set; }
         public int c8 { get; set; }
+
+        public bool IsC0Negative()
+        {
+            if(this.c0 < 0)
+            {
+                return true;
+            }
+            return false;
+        }
 }
