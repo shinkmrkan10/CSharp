@@ -12,6 +12,8 @@ out/*.log
 *.out
 # Prerequisites
 *.d
+# practiceディレクトリとその中身を除外する
+practice/
 
 # Cashe files
 *.cache
