@@ -157,6 +157,10 @@
                                     <Setter Property="Foreground" Value="White" />
                                     <Setter Property="Background" Value="Red" />
                                 </DataTrigger>
+                                <DataTrigger Binding="{Binding c8}" Value="20">
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="Background" Value="Red" />
+                                </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </DataGridTextColumn.CellStyle>
@@ -178,13 +182,33 @@
         <DataGrid ItemsSource="{Binding}" x:Name="dataGrid2" HeadersVisibility="None" >
             <DataGrid.ItemContainerStyle>
                 <Style TargetType="DataGridRow">
-                    <Setter Property="Background" Value="Yellow" />
+                    <Setter Property="Background" Value="Cyan" />
                 </Style>
             </DataGrid.ItemContainerStyle>
         </DataGrid>
     </StackPanel>
     <StackPanel Margin="10" Grid.Row="1" Grid.Column="0">
-        <ListView ItemsSource="{Binding}" x:Name="listViewNode" Margin="30,30,0,0">
+        <ListView ItemsSource="{Binding}" x:Name="listViewNode" Margin="30,30,0,0" >
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="BorderBrush" Value="LightGray"/>
+                    <Setter Property="BorderThickness" Value="0,0,0,0.5"/>
+                    <Setter Property="Background" Value="Yellow"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding num}" Value="0">
+                            <Setter Property="Foreground" Value="Red"/>
+                        <Setter Property="Background" Value="White"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding num}" Value="80">
+                            <Setter Property="Foreground" Value="Red" />
+                        </DataTrigger>
+                        <Trigger Property="IsSelected" Value="True" >
+                            <Setter Property="Background" Value="{x:Static SystemColors.HighlightBrush}" />
+                            <Setter Property="Foreground" Value="{x:Static SystemColors.HighlightTextBrush}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Number" DisplayMemberBinding="{Binding Path=num}" 
@@ -196,8 +220,26 @@
                                 <Setter Property="FontWeight" Value="Bold" />
                             </Style>
                         </GridViewColumn.HeaderContainerStyle>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                            <DataTemplate.Resources>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Background" Value="Red" />
+                                </Style>
+                            </DataTemplate.Resources>
+                            <TextBlock Text="{Binding num}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>  
                     </GridViewColumn>
-                    <GridViewColumn Header="x" DisplayMemberBinding="{Binding Path=x}" Width="30"/>
+                    <GridViewColumn Header="x" DisplayMemberBinding="{Binding Path=x}" Width="30">
+                        <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid Background="Red">
+                                <TextBlock Text="{Binding x}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>  
+                    </GridViewColumn>
                     <GridViewColumn Header="y" DisplayMemberBinding="{Binding Path=y}" Width="30"/>
                     <GridViewColumn Header="cost" DisplayMemberBinding="{Binding Path=cost}" Width="60"/>
                     <GridViewColumn Header="used" DisplayMemberBinding="{Binding Path=used}" Width="40"/>
