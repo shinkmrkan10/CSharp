@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Oneway"
         mc:Ignorable="d"
-        Title="MainWindow" Height="640" Width="840">
+        Title="MainWindow" Height="640" Width="800">
 <ScrollViewer VerticalScrollBarVisibility="Visible">
-<Grid>
+<Grid ShowGridLines="True">
     <Grid.RowDefinitions>
         <RowDefinition Height="*"/>
         <RowDefinition Height="*"/>
@@ -167,6 +167,7 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <TextBlock Text="Node cost from Node[0]" />
     </StackPanel>
     <StackPanel Margin="10" Grid.Row="0 " Grid.Column="1" >
         <DataGrid ItemsSource="{Binding}" x:Name="dataGrid"
@@ -335,9 +336,11 @@
                 </Style>
             </DataGrid.ItemContainerStyle>
         </DataGrid>
+        <TextBlock Text="Node Number" />
     </StackPanel>
     <StackPanel Grid.Row="1" Grid.Column="0">
-        <ListView ItemsSource="{Binding}" x:Name="listViewNode" Margin="30,30,0,0" >
+        <TextBlock Text=" Detected route" Height="20" />
+        <ListView ItemsSource="{Binding}" x:Name="listViewNode" >
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="BorderBrush" Value="LightGray"/>
@@ -360,7 +363,7 @@
             </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Number" DisplayMemberBinding="{Binding Path=num}" 
+                    <GridViewColumn Header="No." DisplayMemberBinding="{Binding Path=num}" 
                     Width="30">
                         <GridViewColumn.HeaderContainerStyle>
                             <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -398,7 +401,8 @@
         </ListView>
     </StackPanel>
     <StackPanel Grid.Row="1" Grid.Column="1">
-        <ListView ItemsSource="{Binding}" x:Name="listViewEdge" Margin="30,30,0,0" >
+        <TextBlock Text=" Edge list" Height="20" />
+        <ListView ItemsSource="{Binding}" x:Name="listViewEdge" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="from">
@@ -425,7 +429,8 @@
         </ListView>
     </StackPanel>
     <StackPanel Grid.Row="1" Grid.Column="2">
-        <ListView ItemsSource="{Binding}" x:Name="listViewDijk" Margin="30,30,0,0">
+        <TextBlock Text=" Node list" Height="20" />
+        <ListView ItemsSource="{Binding}" x:Name="listViewDijk" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Number" DisplayMemberBinding="{Binding Path=num}" Width="30"/>

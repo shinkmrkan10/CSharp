@@ -20,6 +20,9 @@ namespace Oneway
     /// </summary>
     public partial class MainWindow : Window
     {
+		const int INF = 1000000;
+		const int WIDTH = 9;
+		const int HEIGHT = 9;
         public MainWindow()
         {
             InitializeComponent();
@@ -45,19 +48,19 @@ namespace Oneway
             listViewDijk.DataContext = dijkstra.DataN;
 //            listView.DataContext = dijkstra.DataM;
 
-        // cost行列(data[9][9])の作成
-            string[] c0 = new string[9];
-            string[][] data = new string[9][];
+        // cost行列(data[WIDTH][HEIGHT])の作成
+            string[] c0 = new string[WIDTH];
+            string[][] data = new string[HEIGHT][];
 
-            for(int x=0; x<9; x++){
-                data[x] = new string[9];
+            for(int x = 0; x < WIDTH; x++){
+                data[x] = new string[WIDTH];
             }
         // cost行列へのcost代入
-            for(int y=0; y<9; y++){
-                for(int x=0; x<9; x++){
+            for(int y = 0; y < HEIGHT; y++){
+                for(int x = 0; x < WIDTH; x++){
                     int num = y * 9 + x;
 			        var item = dijkstra.DataN.FirstOrDefault(i => i.num == num);
-        			if (item != null && item.cost < 10000)
+        			if (item != null && item.cost != INF)
 		        	{
 			            c0[x] = item.cost.ToString();
                     }
@@ -70,11 +73,11 @@ namespace Oneway
             SetUpDataGrid(dataGrid, data);
         }
 
-        // ListViewのセットアップ
+        // DataGridのセットアップ
 		private static void SetUpDataGrid(DataGrid dataGrid, string[][] data)
         {
             GridView view = new GridView();
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < WIDTH; i++)
             {
                 view.Columns.Add(new GridViewColumn
                 {
