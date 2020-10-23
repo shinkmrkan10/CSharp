@@ -249,11 +249,27 @@
         </ListView>
     </StackPanel>
     <StackPanel Margin="10" Grid.Row="1" Grid.Column="1">
-        <ListView ItemsSource="{Binding}" x:Name="listViewEdge" Margin="30,30,0,0">
+        <ListView ItemsSource="{Binding}" x:Name="listViewEdge" Margin="30,30,0,0" >
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="From" DisplayMemberBinding="{Binding Path=from}" Width="30"/>
-                    <GridViewColumn Header="To" DisplayMemberBinding="{Binding Path=to}" Width="30"/>
+                    <GridViewColumn Header="from">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Background="Cyan">
+                                    <TextBlock Text="{Binding Path=from}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>  
+                    </GridViewColumn>
+                    <GridViewColumn Header="to">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Background="Cyan">
+                                    <TextBlock Text="{Binding Path=to}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>  
+                    </GridViewColumn>
                     <GridViewColumn Header="cost" DisplayMemberBinding="{Binding Path=cost}" Width="30"/>
                 </GridView>
             </ListView.View>
