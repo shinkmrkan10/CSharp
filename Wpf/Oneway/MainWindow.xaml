@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Oneway"
         mc:Ignorable="d"
-        Title="MainWindow" Height="640" Width="800">
+        Title="MainWindow" Height="640" Width="840">
 <ScrollViewer VerticalScrollBarVisibility="Visible">
 <Grid>
     <Grid.RowDefinitions>
@@ -13,9 +13,9 @@
         <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="2*"/>
         <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="2*"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
     <StackPanel Margin="10" Grid.Row="0 " Grid.Column="0" >
         <DataGrid ItemsSource="{Binding}" x:Name="dataGrid1" 
@@ -169,6 +169,155 @@
         </DataGrid>
     </StackPanel>
     <StackPanel Margin="10" Grid.Row="0 " Grid.Column="1" >
+        <DataGrid ItemsSource="{Binding}" x:Name="dataGrid"
+                 HeadersVisibility="None" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding [0]}">
+                <DataGridTextColumn.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="Yellow" />
+                        <Style.Triggers>
+                                <DataTrigger Binding="{Binding [0]}" Value="-1">
+                                    <Setter Property="Background" Value="LimeGreen" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding [0]}" Value="0">
+                                    <Setter Property="Foreground" Value="Red" />
+                                    <Setter Property="Background" Value="White" />
+                                </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding [1]}">
+                <DataGridTextColumn.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="Yellow" />
+                        <Style.Triggers>
+                                <DataTrigger Binding="{Binding [1]}" Value="-1">
+                                    <Setter Property="Background" Value="LimeGreen" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding [1]}" Value="16">
+                                    <Setter Property="Foreground" Value="Gray" />
+                                </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding [2]}">
+                <DataGridTextColumn.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="Yellow" />
+                        <Style.Triggers>
+                                <DataTrigger Binding="{Binding [2]}" Value="-1">
+                                    <Setter Property="Background" Value="LimeGreen" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding [2]}" Value="16">
+                                    <Setter Property="Foreground" Value="Gray" />
+                                </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding [3]}">
+                <DataGridTextColumn.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="Yellow" />
+                        <Style.Triggers>
+                                <DataTrigger Binding="{Binding [3]}" Value="-1">
+                                    <Setter Property="Background" Value="LimeGreen" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding [3]}" Value="16">
+                                    <Setter Property="Foreground" Value="Gray" />
+                                </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding [4]}">
+                <DataGridTextColumn.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="Yellow" />
+                        <Style.Triggers>
+                                <DataTrigger Binding="{Binding [4]}" Value="-1">
+                                    <Setter Property="Background" Value="LimeGreen" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding [4]}" Value="16">
+                                    <Setter Property="Foreground" Value="Gray" />
+                                </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding [5]}">
+                <DataGridTextColumn.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="Yellow" />
+                        <Style.Triggers>
+                                <DataTrigger Binding="{Binding [5]}" Value="-1">
+                                    <Setter Property="Background" Value="LimeGreen" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding [5]}" Value="16">
+                                    <Setter Property="Foreground" Value="Gray" />
+                                </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding [6]}">
+                <DataGridTextColumn.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="Yellow" />
+                        <Style.Triggers>
+                                <DataTrigger Binding="{Binding [6]}" Value="-1">
+                                    <Setter Property="Background" Value="LimeGreen" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding [6]}" Value="16">
+                                    <Setter Property="Foreground" Value="Gray" />
+                                </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding [7]}">
+                <DataGridTextColumn.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="Yellow" />
+                        <Style.Triggers>
+                                <DataTrigger Binding="{Binding [7]}" Value="-1">
+                                    <Setter Property="Background" Value="LimeGreen" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding [7]}" Value="16">
+                                    <Setter Property="Foreground" Value="Gray" />
+                                </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding [8]}">
+                <DataGridTextColumn.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="Yellow" />
+                        <Style.Triggers>
+                                <DataTrigger Binding="{Binding [8]}" Value="-1">
+                                    <Setter Property="Background" Value="LimeGreen" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding [8]}" Value="16">
+                                    <Setter Property="Foreground" Value="Red" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding [8]}" Value="18">
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="Background" Value="Red" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding [8]}" Value="20">
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="Background" Value="Red" />
+                                </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
         <Button Name="sw_show" Background="Pink" 
             Margin = "10"
             Width = "80"
@@ -187,7 +336,7 @@
             </DataGrid.ItemContainerStyle>
         </DataGrid>
     </StackPanel>
-    <StackPanel Margin="10" Grid.Row="1" Grid.Column="0">
+    <StackPanel Grid.Row="1" Grid.Column="0">
         <ListView ItemsSource="{Binding}" x:Name="listViewNode" Margin="30,30,0,0" >
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
@@ -248,7 +397,7 @@
             </ListView.View>
         </ListView>
     </StackPanel>
-    <StackPanel Margin="10" Grid.Row="1" Grid.Column="1">
+    <StackPanel Grid.Row="1" Grid.Column="1">
         <ListView ItemsSource="{Binding}" x:Name="listViewEdge" Margin="30,30,0,0" >
             <ListView.View>
                 <GridView>
@@ -275,7 +424,7 @@
             </ListView.View>
         </ListView>
     </StackPanel>
-    <StackPanel Margin="10" Grid.Row="1" Grid.Column="2">
+    <StackPanel Grid.Row="1" Grid.Column="2">
         <ListView ItemsSource="{Binding}" x:Name="listViewDijk" Margin="30,30,0,0">
             <ListView.View>
                 <GridView>
