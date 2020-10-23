@@ -185,6 +185,10 @@
                                     <Setter Property="Foreground" Value="Red" />
                                     <Setter Property="Background" Value="White" />
                                 </DataTrigger>
+                                <DataTrigger Binding="{Binding [0]}" Value="R">
+                                    <Setter Property="Foreground" Value="Red" />
+                                    <Setter Property="Background" Value="White" />
+                                </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </DataGridTextColumn.CellStyle>
@@ -197,8 +201,9 @@
                                 <DataTrigger Binding="{Binding [1]}" Value="-1">
                                     <Setter Property="Background" Value="LimeGreen" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding [1]}" Value="16">
-                                    <Setter Property="Foreground" Value="Gray" />
+                                <DataTrigger Binding="{Binding [1]}" Value="R">
+                                    <Setter Property="Foreground" Value="Red" />
+                                    <Setter Property="Background" Value="White" />
                                 </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -212,8 +217,9 @@
                                 <DataTrigger Binding="{Binding [2]}" Value="-1">
                                     <Setter Property="Background" Value="LimeGreen" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding [2]}" Value="16">
-                                    <Setter Property="Foreground" Value="Gray" />
+                                <DataTrigger Binding="{Binding [2]}" Value="R">
+                                    <Setter Property="Foreground" Value="Red" />
+                                    <Setter Property="Background" Value="White" />
                                 </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -227,8 +233,9 @@
                                 <DataTrigger Binding="{Binding [3]}" Value="-1">
                                     <Setter Property="Background" Value="LimeGreen" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding [3]}" Value="16">
-                                    <Setter Property="Foreground" Value="Gray" />
+                                <DataTrigger Binding="{Binding [3]}" Value="R">
+                                    <Setter Property="Foreground" Value="Red" />
+                                    <Setter Property="Background" Value="White" />
                                 </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -242,8 +249,9 @@
                                 <DataTrigger Binding="{Binding [4]}" Value="-1">
                                     <Setter Property="Background" Value="LimeGreen" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding [4]}" Value="16">
-                                    <Setter Property="Foreground" Value="Gray" />
+                                <DataTrigger Binding="{Binding [4]}" Value="R">
+                                    <Setter Property="Foreground" Value="Red" />
+                                    <Setter Property="Background" Value="White" />
                                 </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -257,8 +265,9 @@
                                 <DataTrigger Binding="{Binding [5]}" Value="-1">
                                     <Setter Property="Background" Value="LimeGreen" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding [5]}" Value="16">
-                                    <Setter Property="Foreground" Value="Gray" />
+                                <DataTrigger Binding="{Binding [5]}" Value="R">
+                                    <Setter Property="Foreground" Value="Red" />
+                                    <Setter Property="Background" Value="White" />
                                 </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -272,8 +281,9 @@
                                 <DataTrigger Binding="{Binding [6]}" Value="-1">
                                     <Setter Property="Background" Value="LimeGreen" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding [6]}" Value="16">
-                                    <Setter Property="Foreground" Value="Gray" />
+                                <DataTrigger Binding="{Binding [6]}" Value="R">
+                                    <Setter Property="Foreground" Value="Red" />
+                                    <Setter Property="Background" Value="White" />
                                 </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -287,8 +297,9 @@
                                 <DataTrigger Binding="{Binding [7]}" Value="-1">
                                     <Setter Property="Background" Value="LimeGreen" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding [7]}" Value="16">
-                                    <Setter Property="Foreground" Value="Gray" />
+                                <DataTrigger Binding="{Binding [7]}" Value="R">
+                                    <Setter Property="Foreground" Value="Red" />
+                                    <Setter Property="Background" Value="White" />
                                 </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -302,16 +313,9 @@
                                 <DataTrigger Binding="{Binding [8]}" Value="-1">
                                     <Setter Property="Background" Value="LimeGreen" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding [8]}" Value="16">
+                                <DataTrigger Binding="{Binding [8]}" Value="R">
                                     <Setter Property="Foreground" Value="Red" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding [8]}" Value="18">
-                                    <Setter Property="Foreground" Value="White" />
-                                    <Setter Property="Background" Value="Red" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding [8]}" Value="20">
-                                    <Setter Property="Foreground" Value="White" />
-                                    <Setter Property="Background" Value="Red" />
+                                    <Setter Property="Background" Value="White" />
                                 </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -319,6 +323,7 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <TextBlock Text="Route" />
         <Button Name="sw_show" Background="Pink" 
             Margin = "10"
             Width = "80"

@@ -23,7 +23,8 @@ namespace Oneway
 		const int INF = 1000000;
 		const int WIDTH = 9;
 		const int HEIGHT = 9;
-        public MainWindow()
+        int num;
+            public MainWindow()
         {
             InitializeComponent();
             MazeList mazeList = new MazeList();
@@ -32,6 +33,8 @@ namespace Oneway
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
+            Node item;
+
             MazeList mazeList = new MazeList();
 
             NodeList nodeList = new NodeList();
@@ -58,8 +61,8 @@ namespace Oneway
         // cost行列へのcost代入
             for(int y = 0; y < HEIGHT; y++){
                 for(int x = 0; x < WIDTH; x++){
-                    int num = y * 9 + x;
-			        var item = dijkstra.DataN.FirstOrDefault(i => i.num == num);
+                    num = y * 9 + x;
+			        item = dijkstra.DataN.FirstOrDefault(i => i.num == num);
         			if (item != null && item.cost != INF)
 		        	{
 			            c0[x] = item.cost.ToString();
@@ -69,6 +72,23 @@ namespace Oneway
                     }
                     data[y][x] = c0[x];
                 }
+            }
+//            SetUpDataGrid(dataGrid, data);
+        // cost行列へのroute代入(fromを逆順にたどる)
+            num =80;
+			item = dijkstra.DataN.FirstOrDefault(i => i.num == num);
+        	if (item != null && item.cost != INF)
+	    	{
+	            num = item.from;
+                data[item.y][item.x] = "R";
+                while(num != 0){
+	    		    item = dijkstra.DataN.FirstOrDefault(i => i.num == num);
+            		if (item != null)
+		        	{
+		                num = item.from;
+                        data[item.y][item.x] = "R";
+                    }
+               }
             }
             SetUpDataGrid(dataGrid, data);
         }
