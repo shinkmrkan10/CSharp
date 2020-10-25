@@ -20,9 +20,11 @@
         <Image Name="imageGray2" Stretch="None" Grid.Column="1" Grid.Row="0" />
         <Image Name="imageBinary" Stretch="None" Grid.Column="1" Grid.Row="1" />
         <StackPanel Grid.Column="0" Grid.Row="1">
-            <TextBlock Name="textBlock" Text="2値化変換閾値入力" />
+            <TextBlock Name="textBlock" Text="2値化変換閾値入力" 
+                Margin="10" />
         <TextBox x:Name="textBox" Text="{Binding Value, ElementName=slider}" 
-                TextChanged="textBox_TextChanged">
+                TextChanged="textBox_TextChanged" Width="100" 
+                HorizontalAlignment="Left" Margin="10">
         </TextBox>
         <Slider x:Name="slider" Minimum="0" Maximum="255"
                 TickFrequency="1" IsSnapToTickEnabled="True" 
