@@ -7,6 +7,8 @@ namespace ImageTest03
 {
     public partial class MainWindow : Window
     {
+        public string filename = "C:/Image/horseQ.jpg";
+ //       public string filename = "C:/Image/horse2Q.jpg";
         public MainWindow()
         {
             InitializeComponent();
@@ -19,8 +21,7 @@ namespace ImageTest03
             {
                 try{
                     threshold = (byte)Int32.Parse(textBox.Text);
-                    string filename1 = "C:/Image/horseQ.jpg";
-                    Create_ImageArray(filename1, threshold);
+                    Create_ImageArray(filename, threshold);
                     textBox.DataContext = threshold;
                     repeat = false;
                 }
