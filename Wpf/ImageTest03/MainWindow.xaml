@@ -1,0 +1,35 @@
+﻿<Window x:Class="ImageTest03.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ImageTest03"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="544" Width="680" Background="LightGray">
+<ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Image Name="image" Stretch="None" Grid.Column="0" Grid.Row="0" />
+        <Image Name="imageGray2" Stretch="None" Grid.Column="1" Grid.Row="0" />
+        <Image Name="imageBinary" Stretch="None" Grid.Column="1" Grid.Row="1" />
+        <StackPanel Grid.Column="0" Grid.Row="1">
+            <TextBlock Name="textBlock" Text="2値化変換閾値入力" />
+        <TextBox x:Name="textBox" Text="{Binding Value, ElementName=slider}" 
+                TextChanged="textBox_TextChanged">
+        </TextBox>
+        <Slider x:Name="slider" Minimum="0" Maximum="255"
+                TickFrequency="1" IsSnapToTickEnabled="True" 
+                Value="{Binding Text, ElementName=textBox}" SmallChange="1"/>
+        <Button Content="Close Window" Height="23" Width="100" Background="Pink"
+                HorizontalAlignment="Left" Margin="10" Click="button_Click_2" />
+        </StackPanel>
+    </Grid>
+</ScrollViewer>
+</Window>
