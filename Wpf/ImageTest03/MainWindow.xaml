@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageTest03"
         mc:Ignorable="d"
-        Title="MainWindow" Height="544" Width="680" Background="LightGray">
+        Title="MainWindow" Height="640" Width="680" Background="LightGray">
 <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -16,28 +16,28 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <Image Name="image" Stretch="None" Grid.Column="0" Grid.Row="0" />
-        <Image Name="imageGray2" Stretch="None" Grid.Column="1" Grid.Row="0" />
-        <Image Name="imageBinary" Stretch="None" Grid.Column="1" Grid.Row="1" />
-        <StackPanel Grid.Column="0" Grid.Row="1">
-            <TextBlock x:Name="textBlock" Text="{Binding}" Margin="5" />
+        <Image Name="image" Stretch="None" Grid.Column="0" Grid.Row="1" />
+        <Image Name="imageGray2" Stretch="None" Grid.Column="1" Grid.Row="1" />
+        <Image Name="imageBinary" Stretch="None" Grid.Column="1" Grid.Row="0" />
+        <StackPanel Grid.Column="0" Grid.Row="0">
             <TextBlock x:Name="textBlock1" Text="画像を選択してください" Margin="10" /> 
-            <ComboBox x:Name="comboBox" ItemsSource="{Binding}"  Margin="5"
-            HorizontalAlignment="Left" Width="150" />
+            <ComboBox x:Name="comboBox" ItemsSource="{Binding}"  Margin="10"
+            HorizontalAlignment="Left" Width="180" />
         <Button Content="Change Image" Height="23" Width="100" Background="Pink"
-                HorizontalAlignment="Left" Margin="5" Click="button_Click_1" />
+                HorizontalAlignment="Left" Margin="10" Click="button_Click_1" />
             <TextBlock x:Name="textBlock2" Text="2値化閾値設定" 
                 FontWeight="Bold" Margin="10" />
         <TextBox x:Name="textBox" Text="{Binding Value, ElementName=slider}" 
                 TextChanged="textBox_TextChanged" Width="100" 
-                HorizontalAlignment="Left" Margin="5">
+                HorizontalAlignment="Left" Margin="10">
         </TextBox>
         <Slider x:Name="slider" Minimum="0" Maximum="255"
                 TickFrequency="1" IsSnapToTickEnabled="True" Width="150" 
-                HorizontalAlignment="Left" Margin="5" 
+                HorizontalAlignment="Left" Margin="10" 
                 Value="{Binding Text, ElementName=textBox}" SmallChange="1"/>
         <Button Content="Close Window" Height="23" Width="100" Background="Pink"
-                HorizontalAlignment="Left" Margin="5" Click="button_Click_2" />
+                HorizontalAlignment="Left" Margin="10" Click="button_Click_2" />
+            <TextBlock x:Name="textBlock" Text="{Binding}" Margin="10" />
         </StackPanel>
     </Grid>
 </ScrollViewer>
