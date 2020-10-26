@@ -20,12 +20,26 @@
         <Image Name="imageGray2" Stretch="None" Grid.Column="1" Grid.Row="1" />
         <Image Name="imageBinary" Stretch="None" Grid.Column="1" Grid.Row="0" />
         <StackPanel Grid.Column="0" Grid.Row="0">
-            <TextBlock x:Name="textBlock1" Text="画像を選択してください" Margin="10" /> 
+    <Grid ShowGridLines="true">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="0" Grid.Row="0">
+             <TextBlock x:Name="textBlock1" Text="画像を選択してください" Margin="10" /> 
             <ComboBox x:Name="comboBox" ItemsSource="{Binding}"  Margin="10"
             HorizontalAlignment="Left" Width="180" />
-        <Button Content="Change Image" Height="23" Width="100" Background="Pink"
+        <Button Content="画像変更" Height="23" Width="100" Foreground="White" Background="Darkblue"
                 HorizontalAlignment="Left" Margin="10" Click="button_Click_1" />
-            <TextBlock x:Name="textBlock2" Text="2値化閾値設定" 
+        </StackPanel>
+        <StackPanel Grid.Column="0" Grid.Row="1">
+        <Button Content="2値化処理" Height="23" Width="100" Background="Pink"
+                HorizontalAlignment="Left" Margin="10" Click="button_Click_bin" />
+             <TextBlock x:Name="textBlock2" Text="2値化閾値設定" 
                 FontWeight="Bold" Margin="10" />
         <TextBox x:Name="textBox" Text="{Binding Value, ElementName=slider}" 
                 TextChanged="textBox_TextChanged" Width="100" 
@@ -35,9 +49,23 @@
                 TickFrequency="1" IsSnapToTickEnabled="True" Width="150" 
                 HorizontalAlignment="Left" Margin="10" 
                 Value="{Binding Text, ElementName=textBox}" SmallChange="1"/>
-        <Button Content="Close Window" Height="23" Width="100" Background="Pink"
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="0">
+        <Button Content="階調反転処理" Height="23" Width="100" Background="Pink"
+                HorizontalAlignment="Left" Margin="10" Click="button_Click_rev" />
+        <Button Content="暗部強調処理" Height="23" Width="100" Background="Pink"
+                HorizontalAlignment="Left" Margin="10" Click="button_Click_lowS" />
+        <Button Content="明部強調処理" Height="23" Width="100" Background="Pink"
+                HorizontalAlignment="Left" Margin="10" Click="button_Click_hiS" />
+        <Button Content="中間部強調処理" Height="23" Width="100" Background="Pink"
+                HorizontalAlignment="Left" Margin="10" Click="button_Click_midS" />
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="1">
+        <Button Content="終了" Height="23" Width="100" Foreground="White" Background="Red"
                 HorizontalAlignment="Left" Margin="10" Click="button_Click_2" />
             <TextBlock x:Name="textBlock" Text="{Binding}" Margin="10" />
+        </StackPanel>
+            </Grid>
         </StackPanel>
     </Grid>
 </ScrollViewer>

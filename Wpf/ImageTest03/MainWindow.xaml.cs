@@ -8,6 +8,7 @@ namespace ImageTest03
     public partial class MainWindow : Window
     {
         public string filename = "C:/Image/horse2Q.jpg";
+        public int effect = 0;
         public MainWindow()
         {
         string[] files = System.IO.Directory.GetFiles(@"C:\Image\", "*.*");
@@ -45,7 +46,7 @@ namespace ImageTest03
             {
                 try{
                     threshold = (byte)Int32.Parse(textBox.Text);
-                    Create_ImageArray(filename, threshold);
+                    Create_ImageArray(filename, effect, threshold);
                     textBox.DataContext = threshold;
                     textBlock.DataContext = filename;
                     repeat = false;
@@ -73,7 +74,32 @@ namespace ImageTest03
             this.Close();
         }
 
-        private void Create_ImageArray(string filename, byte threshold){
+        private void button_Click_bin(object sender, RoutedEventArgs e)
+        {
+                    effect = 1;
+                    Threshold_Check();
+        }
+        private void button_Click_rev(object sender, RoutedEventArgs e)
+        {
+                    effect = 2;
+                    Threshold_Check();
+        }
+        private void button_Click_lowS(object sender, RoutedEventArgs e)
+        {
+                    effect = 3;
+                    Threshold_Check();
+        }
+        private void button_Click_hiS(object sender, RoutedEventArgs e)
+        {
+                    effect = 4;
+                    Threshold_Check();
+        }
+        private void button_Click_midS(object sender, RoutedEventArgs e)
+        {
+                    effect = 5;
+                    Threshold_Check();
+        }
+        private void Create_ImageArray(string filename, int effect, byte threshold){
 
             BitmapImage bitmapimageOriginal = new BitmapImage(new Uri(filename, UriKind.RelativeOrAbsolute));
 
@@ -85,7 +111,53 @@ namespace ImageTest03
             byte[] originalPixels = new byte[width * height * 4];
             byte[] gray2 = new byte[width * height * 4];
             byte[] bi = new byte[width * height * 4];
+            byte[] lookUp = new byte[width * height * 4];
 
+            // 処理選択
+            switch(effect){
+                case 1:
+            // LookUp Table作成:2値化
+                    for(int x = threshold; x < 255; x++){
+                        lookUp[x] = 255;
+                    }
+                    break;
+                case 2:
+            // LookUp Table作成:ネガポジ反転
+                    for(int x = 0; x < 255; x++){
+                        lookUp[x] = (byte)(255 - x);
+                    }
+                    break;
+                case 3:
+            // LookUp Table作成:暗部強調
+                    for(int x = 0; x < 127; x++){
+                        lookUp[x] = (byte)(x * 2);
+                    }
+                    for(int x = 128; x < 255; x++){
+                        lookUp[x] = 255;
+                    }
+                    break;
+                case 4:
+            // LookUp Table作成:明部強調
+                    for(int x = 128; x < 255; x++){
+                        lookUp[x] = (byte)((x - 128) * 2);
+                    }
+                    break;
+                case 5:
+            // LookUp Table作成:中間部強調
+                    for(int x = 64; x < 191; x++){
+                        lookUp[x] = (byte)((x - 64) * 2);
+                    }
+                    for(int x = 192; x < 255; x++){
+                        lookUp[x] = 255;
+                    }
+                    break;
+                default:
+            // LookUp Table作成:グレースケール
+                for(int x = 0; x < 255; x++){
+                    lookUp[x] = (byte)x;
+                }
+                break;
+            }
             // BitmapSourceから配列にコピー
             int stride = (width * bitmap.Format.BitsPerPixel + 7) / 8;
             bitmap.CopyPixels(originalPixels, stride, 0);
@@ -124,18 +196,26 @@ namespace ImageTest03
                 gray2[x + 1] = y2;
                 gray2[x + 2] = y2;
                 gray2[x + 3] = 255;
+
             // 2値画像作成
-            // 2値化変換
-                if(y2 > threshold){
-                    y2 = 255;
-                }
-                else{
-                    y2 = 0;
-                }
-                bi[x] = y2;
-                bi[x + 1] = y2;
-                bi[x + 2] = y2;
+            // 2値化変換:if文
+            //    if(y2 > threshold){
+            //        y2 = 255;
+            //    }
+            //    else{
+            //        y2 = 0;
+            //    }
+            //    bi[x] = y2;
+            //    bi[x + 1] = y2;
+            //    bi[x + 2] = y2;
+            //    bi[x + 3] = 255;
+            // 画素変換:LookUpTable
+                byte y3 = (byte)lookUp[y2];
+                bi[x] = y3;
+                bi[x + 1] = y3;
+                bi[x + 2] = y3;
                 bi[x + 3] = 255;
+
             }
 
             // ウィンドウに表示する
