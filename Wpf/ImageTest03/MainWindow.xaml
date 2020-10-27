@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageTest03"
         mc:Ignorable="d"
-        Title="MainWindow" Height="640" Width="680" Background="LightGray">
+        Title="階調変換" Height="640" Width="700" Background="LightGray">
 <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -37,28 +37,56 @@
                 HorizontalAlignment="Left" Margin="10" Click="button_Click_1" />
         </StackPanel>
         <StackPanel Grid.Column="0" Grid.Row="1">
-        <Button Content="2値化処理" Height="23" Width="100" Background="Pink"
-                HorizontalAlignment="Left" Margin="10" Click="button_Click_bin" />
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="0" Grid.Row="0">
              <TextBlock x:Name="textBlock2" Text="2値化閾値設定" 
                 FontWeight="Bold" Margin="10" />
-        <TextBox x:Name="textBox" Text="{Binding Value, ElementName=slider}" 
-                TextChanged="textBox_TextChanged" Width="100" 
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="0">
+            <TextBox x:Name="textBox" Text="{Binding Value, ElementName=slider}" 
+                TextChanged="textBox_TextChanged" Width="50" 
                 HorizontalAlignment="Left" Margin="10">
-        </TextBox>
+            </TextBox>
+        </StackPanel>
+        <StackPanel Grid.Column="0" Grid.ColumnSpan="2"  Grid.Row="1">
         <Slider x:Name="slider" Minimum="0" Maximum="255"
                 TickFrequency="1" IsSnapToTickEnabled="True" Width="150" 
                 HorizontalAlignment="Left" Margin="10" 
                 Value="{Binding Text, ElementName=textBox}" SmallChange="1"/>
         </StackPanel>
+        <StackPanel Grid.Column="0" Grid.Row="2">
+             <TextBlock x:Name="textBlockCon" Text="γ値設定" 
+                FontWeight="Bold" Margin="10" />
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="2">
+            <TextBox x:Name="textBoxCon" Text="{Binding Value, ElementName=sliderCon}" 
+                TextChanged="textBox_TextChanged" Width="50" MaxLength="5" 
+                HorizontalAlignment="Left" Margin="10">
+            </TextBox>
+        </StackPanel>
+        <StackPanel Grid.Column="0" Grid.ColumnSpan="2"  Grid.Row="3">
+        <Slider x:Name="sliderCon" Minimum="0.33" Maximum="3"
+                TickFrequency="0.01" IsSnapToTickEnabled="True" Width="150" 
+                HorizontalAlignment="Left" Margin="10"  LargeChange="0.01"
+                Value="{Binding Text, ElementName=textBoxCon}" SmallChange="0.01"/>
+        </StackPanel>
+        </Grid>
+        </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="0">
-        <Button Content="階調反転処理" Height="23" Width="100" Background="Pink"
-                HorizontalAlignment="Left" Margin="10" Click="button_Click_rev" />
-        <Button Content="暗部強調処理" Height="23" Width="100" Background="Pink"
-                HorizontalAlignment="Left" Margin="10" Click="button_Click_lowS" />
-        <Button Content="明部強調処理" Height="23" Width="100" Background="Pink"
-                HorizontalAlignment="Left" Margin="10" Click="button_Click_hiS" />
-        <Button Content="中間部強調処理" Height="23" Width="100" Background="Pink"
-                HorizontalAlignment="Left" Margin="10" Click="button_Click_midS" />
+            <ComboBox x:Name="comboBoxCont" Margin="10" HorizontalAlignment="Left" Width="120" 
+            ItemsSource="{Binding}" SelectedValuePath="Key" DisplayMemberPath="Value"/>
+        <Button Content="階調変換処理" Height="23" Width="100" Foreground="White" Background="Darkblue"
+                HorizontalAlignment="Left" Margin="10" Click="button_Click_Cont" />
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="1">
         <Button Content="終了" Height="23" Width="100" Foreground="White" Background="Red"

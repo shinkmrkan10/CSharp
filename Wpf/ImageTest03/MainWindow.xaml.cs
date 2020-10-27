@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System;
@@ -7,53 +8,62 @@ namespace ImageTest03
 {
     public partial class MainWindow : Window
     {
+        public Dictionary<string, string> ContDic { get; set; }
         public string filename = "C:/Image/horse2Q.jpg";
         public int effect = 0;
+//        public double gamma = 1.0;
         public MainWindow()
         {
-        string[] files = System.IO.Directory.GetFiles(@"C:\Image\", "*.*");
-        foreach (string s in files)
-        {
-            System.IO.FileInfo fi = null;
-            try
+            ContDic = new Dictionary<string, string>()
             {
+                { "0", "グレースケール" },
+                { "1", "2値化" },
+                { "2", "ネガポジ反転" },
+                { "3", "暗部強調" },
+                { "4", "明部強調" },
+                { "5", "中間部強調" },
+                { "6", "γ変換" },
+            };
+            string[] files = System.IO.Directory.GetFiles(@"C:\Image\", "*.*");
+            foreach (string s in files)
+            {
+                System.IO.FileInfo fi = null;
+                try
+                {
                 fi = new System.IO.FileInfo(s);
+                }
+                catch (System.IO.FileNotFoundException)
+                {
+                    continue;
+                }
             }
-            catch (System.IO.FileNotFoundException)
-            {
-                continue;
-            }
-        }
 
             InitializeComponent();
             comboBox.DataContext = files;
-            Threshold_Check();
-        }
-
-        private void comboBox_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            string selectedItem = comboBox.SelectedItem.ToString();
-            filename = selectedItem;
-            textBlock2.Text = selectedItem;
-            textBlock2.Text = "test";
+            comboBoxCont.DataContext = ContDic;
             Threshold_Check();
         }
 
         private void Threshold_Check(){
             byte threshold;
+            double gamma;
             bool repeat = true;
             while (repeat)
             {
                 try{
                     threshold = (byte)Int32.Parse(textBox.Text);
-                    Create_ImageArray(filename, effect, threshold);
+                    gamma = Double.Parse(textBoxCon.Text);
+                    Create_ImageArray(filename, effect, threshold, gamma);
                     textBox.DataContext = threshold;
+                    textBoxCon.DataContext = gamma;
                     textBlock.DataContext = filename;
                     repeat = false;
                 }
                 catch (FormatException)
                 {
                     textBox.Text = "100";
+                    textBoxCon.Text = "1.0";
+
                 }
             }
         }
@@ -69,37 +79,18 @@ namespace ImageTest03
                     Threshold_Check();
         }
 
+        private void button_Click_Cont(object sender, RoutedEventArgs e)
+        {
+                    effect = (int)comboBoxCont.SelectedIndex;
+                    Threshold_Check();
+        }
+
         private void button_Click_2(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
-        private void button_Click_bin(object sender, RoutedEventArgs e)
-        {
-                    effect = 1;
-                    Threshold_Check();
-        }
-        private void button_Click_rev(object sender, RoutedEventArgs e)
-        {
-                    effect = 2;
-                    Threshold_Check();
-        }
-        private void button_Click_lowS(object sender, RoutedEventArgs e)
-        {
-                    effect = 3;
-                    Threshold_Check();
-        }
-        private void button_Click_hiS(object sender, RoutedEventArgs e)
-        {
-                    effect = 4;
-                    Threshold_Check();
-        }
-        private void button_Click_midS(object sender, RoutedEventArgs e)
-        {
-                    effect = 5;
-                    Threshold_Check();
-        }
-        private void Create_ImageArray(string filename, int effect, byte threshold){
+        private void Create_ImageArray(string filename, int effect, byte threshold, double gamma){
 
             BitmapImage bitmapimageOriginal = new BitmapImage(new Uri(filename, UriKind.RelativeOrAbsolute));
 
@@ -111,49 +102,57 @@ namespace ImageTest03
             byte[] originalPixels = new byte[width * height * 4];
             byte[] gray2 = new byte[width * height * 4];
             byte[] bi = new byte[width * height * 4];
-            byte[] lookUp = new byte[width * height * 4];
+            byte[] lookUp = new byte[256];
+//            byte[] lookUp = new byte[width * height * 4];
 
             // 処理選択
             switch(effect){
                 case 1:
             // LookUp Table作成:2値化
-                    for(int x = threshold; x < 255; x++){
+                    for(int x = threshold; x < 256; x++){
                         lookUp[x] = 255;
                     }
                     break;
                 case 2:
             // LookUp Table作成:ネガポジ反転
-                    for(int x = 0; x < 255; x++){
+                    for(int x = 0; x < 256; x++){
                         lookUp[x] = (byte)(255 - x);
                     }
                     break;
                 case 3:
             // LookUp Table作成:暗部強調
-                    for(int x = 0; x < 127; x++){
+                    for(int x = 0; x < 128; x++){
                         lookUp[x] = (byte)(x * 2);
                     }
-                    for(int x = 128; x < 255; x++){
+                    for(int x = 128; x < 256; x++){
                         lookUp[x] = 255;
                     }
                     break;
                 case 4:
             // LookUp Table作成:明部強調
-                    for(int x = 128; x < 255; x++){
+                    for(int x = 128; x < 256; x++){
                         lookUp[x] = (byte)((x - 128) * 2);
                     }
                     break;
                 case 5:
             // LookUp Table作成:中間部強調
-                    for(int x = 64; x < 191; x++){
+                    for(int x = 64; x < 192; x++){
                         lookUp[x] = (byte)((x - 64) * 2);
                     }
-                    for(int x = 192; x < 255; x++){
+                    
+                    for(int x = 192; x < 256; x++){
                         lookUp[x] = 255;
+                    }
+                    break;
+                case 6:
+            // LookUp Table作成:γ変換
+                    for(int x = 0; x < 256; x++){
+                        lookUp[x] = (byte)(255 * Math.Pow(((double)x / 255), (1 / gamma)));
                     }
                     break;
                 default:
             // LookUp Table作成:グレースケール
-                for(int x = 0; x < 255; x++){
+                for(int x = 0; x < 256; x++){
                     lookUp[x] = (byte)x;
                 }
                 break;
