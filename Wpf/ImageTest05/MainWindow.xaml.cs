@@ -9,8 +9,10 @@ namespace ImageTest05
     public partial class MainWindow : Window
     {
         public Dictionary<string, string> ContDic { get; set; }
+        public Dictionary<string, string> ContImageDic { get; set; }
         public string filename = "C:/Image/horse2Q.jpg";
         public int effect = 0;
+        public string component = "gray2";
 //        public double gamma = 1.0;
         public MainWindow()
         {
@@ -23,6 +25,13 @@ namespace ImageTest05
                 { "4", "明部強調" },
                 { "5", "中間部強調" },
                 { "6", "γ変換" },
+            };
+            ContImageDic = new Dictionary<string, string>()
+            {
+                { "gray2", "グレースケール画像" },
+                { "red", "R成分画像" },
+                { "green", "G成分画像" },
+                { "blue", "B成分画像" },
             };
             string[] files = System.IO.Directory.GetFiles(@"C:\Image\", "*.*");
             foreach (string s in files)
@@ -41,6 +50,7 @@ namespace ImageTest05
             InitializeComponent();
             comboBox.DataContext = files;
             comboBoxCont.DataContext = ContDic;
+            comboBoxComponent.DataContext = ContImageDic;
             Threshold_Check();
         }
 
@@ -57,7 +67,8 @@ namespace ImageTest05
                     textBox.DataContext = threshold;
                     textBoxCon.DataContext = gamma;
                     textBlock.DataContext = filename;
-                    textBlockEffect.DataContext =  comboBoxCont.SelectedValue;
+                    textBlockEffect.DataContext =  comboBoxCont.SelectedItem;
+                    textBlockComponent2.DataContext =  comboBoxComponent.SelectedItem;
                     repeat = false;
                 }
                 catch (FormatException)
@@ -80,15 +91,21 @@ namespace ImageTest05
                     Threshold_Check();
         }
 
-        private void button_Click_Cont(object sender, RoutedEventArgs e)
-        {
-                    effect = (int)comboBoxCont.SelectedIndex;
-                    Threshold_Check();
-        }
-
         private void button_Click_2(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void button_Click_Cont(object sender, RoutedEventArgs e)
+        {
+                    effect = Int32.Parse(comboBoxCont.SelectedValue.ToString());
+                    Threshold_Check();
+        }
+
+        private void button_Click_Component(object sender, RoutedEventArgs e)
+        {
+                    component = comboBoxComponent.SelectedValue.ToString();
+                    Threshold_Check();
         }
 
         private void Create_ImageArray(string filename, int effect, byte threshold, double gamma){
@@ -107,7 +124,6 @@ namespace ImageTest05
             byte[] gray2 = new byte[width * height * 4];
             byte[] bi = new byte[width * height * 4];
             byte[] lookUp = new byte[256];
-//            byte[] lookUp = new byte[width * height * 4];
 
             // 処理選択
             switch(effect){
