@@ -5,29 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageTest05"
         mc:Ignorable="d"
-        Title="画像処理" Height="640" Width="1050" Background="LightGray">
+        Title="画像処理" Height="640" Width="850" Background="LightGray">
 <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
     <Grid ShowGridLines="true">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
         <Image Name="image" Stretch="None" Grid.Column="0" Grid.Row="0" />
         <Image Name="imageGray2" Stretch="None" Grid.Column="0" Grid.Row="1" />
-        <Image Name="imageBinary" Stretch="None" Grid.Column="2" Grid.Row="0" />
         <Image Name="imageRed" Stretch="None" Grid.Column="0" Grid.Row="2" />
-        <Image Name="imageGreen" Stretch="None" Grid.Column="1" Grid.Row="2" />
-        <Image Name="imageBlue" Stretch="None" Grid.Column="2" Grid.Row="2" />
+        <Image Name="imageGreen" Stretch="None" Grid.Column="0" Grid.Row="3" />
+        <Image Name="imageBlue" Stretch="None" Grid.Column="0" Grid.Row="4" />
+        <Image Name="imageColorNew" Stretch="None" Grid.Column="2" Grid.Row="0" />
+        <Image Name="imageBinary" Stretch="None" Grid.Column="2" Grid.Row="1" />
+        <Image Name="imageRedNew" Stretch="None" Grid.Column="2" Grid.Row="2" />
+        <Image Name="imageGreenNew" Stretch="None" Grid.Column="2" Grid.Row="3" />
+        <Image Name="imageBlueNew" Stretch="None" Grid.Column="2" Grid.Row="4" />
         <StackPanel Grid.Column="1" Grid.Row="0">
             <Grid ShowGridLines="true">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -36,10 +41,51 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Column="0" Grid.Row="0">
                     <TextBlock x:Name="textBlock1" Text="処理する画像を選択してください" Margin="10" /> 
-                    <ComboBox x:Name="comboBox" ItemsSource="{Binding}"  Margin="10"
-                        HorizontalAlignment="Left" Width="180" />
-                    <Button Content="画像変更" Height="23" Width="100" Foreground="White" Background="Darkblue"
-                        HorizontalAlignment="Left" Margin="10" Click="button_Click_1" />
+                    <ComboBox x:Name="comboBox" ItemsSource="{Binding}" Width="180" Margin="10" 
+                        SelectionChanged= "comboBox_SelectedValueChanged" SelectedValuePath="fname" 
+                        DisplayMemberPath="fname" HorizontalAlignment="Left" SelectedIndex="8"/>
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="1">
+                    <TextBlock Text="右の画像を出力します =>" FontWeight="Bold" Margin="10" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="C:/Image/NewImage/" />
+                        <TextBox x:Name="textBoxSave" Text="test" Width="50" />
+                        <TextBlock Text=".png" />
+                    </StackPanel>
+                    <Button Content="画像保存" Height="23" Width="100" Foreground="White" Background="Red"
+                        HorizontalAlignment="Left" Margin="10" Click="button_Click_Save" />
+                    <Button Content="終了" Height="23" Width="100" Foreground="White" Background="Red"
+                        HorizontalAlignment="Left" Margin="10" Click="button_Click_Close" />
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="1">
+            <Grid ShowGridLines="true">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Column="0" Grid.Row="0">
+                    <TextBlock x:Name="textBlockCont" Text="グレースケール画像の階調変換" Margin="10" /> 
+                    <ComboBox x:Name="comboBoxCont" SelectionChanged="comboBoxCont_SelectedValueChanged" Margin="10" HorizontalAlignment="Left" Width="120" 
+                        ItemsSource="{Binding}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0" />
                 </StackPanel>
                 <StackPanel Grid.Column="0" Grid.Row="1">
                     <Grid>
@@ -58,8 +104,8 @@
                                 FontWeight="Bold" Margin="10" />
                         </StackPanel>
                         <StackPanel Grid.Column="1" Grid.Row="0">
-                            <TextBox x:Name="textBox" Text="{Binding Value, ElementName=slider}" 
-                                TextChanged="textBox_TextChanged" Width="50" 
+                            <TextBox x:Name="textBoxBin" Text="{Binding Value, ElementName=slider}" 
+                                TextChanged="textBoxBin_TextChanged" Width="50" 
                                 HorizontalAlignment="Left" Margin="10">
                             </TextBox>
                         </StackPanel>
@@ -67,7 +113,7 @@
                         <Slider x:Name="slider" Minimum="0" Maximum="255"
                                 TickFrequency="1" IsSnapToTickEnabled="True" Width="150" 
                                 HorizontalAlignment="Left" Margin="10" 
-                                Value="{Binding Text, ElementName=textBox}" SmallChange="1"/>
+                                Value="{Binding Text, ElementName=textBoxBin}" SmallChange="1"/>
                         </StackPanel>
                         <StackPanel Grid.Column="0" Grid.Row="2">
                             <TextBlock x:Name="textBlockCon" Text="γ値設定" 
@@ -75,7 +121,7 @@
                         </StackPanel>
                         <StackPanel Grid.Column="1" Grid.Row="2">
                             <TextBox x:Name="textBoxCon" Text="{Binding Value, ElementName=sliderCon}" 
-                                TextChanged="textBox_TextChanged" Width="50" MaxLength="5" 
+                                TextChanged="textBoxBin_TextChanged" Width="50" MaxLength="5" 
                                 HorizontalAlignment="Left" Margin="10">
                             </TextBox>
                         </StackPanel>
@@ -87,24 +133,11 @@
                         </StackPanel>
                     </Grid>
                 </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="0">
-                    <ComboBox x:Name="comboBoxCont" Margin="10" HorizontalAlignment="Left" Width="120" 
-                        ItemsSource="{Binding}" SelectedValuePath="Key" DisplayMemberPath="Value"/>
-                    <Button Content="階調変換処理" Height="23" Width="100" Foreground="White" Background="Darkblue"
-                        HorizontalAlignment="Left" Margin="10" Click="button_Click_Cont" />
-                </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="1">
-                    <TextBlock x:Name="textBlock" Text="{Binding}" FontWeight="Bold" Margin="10" />
-                    <TextBlock x:Name="textBlockEffect" Text="{Binding}" FontWeight="Bold" Margin="10" />
-                    <Button Content="終了" Height="23" Width="100" Foreground="White" Background="Red"
-                        HorizontalAlignment="Left" Margin="10" Click="button_Click_2" />
-                </StackPanel>
             </Grid>
         </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="1">
+        <StackPanel Grid.Column="1" Grid.Row="2">
             <Grid ShowGridLines="true">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -112,12 +145,179 @@
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Column="0" Grid.Row="0">
-                    <TextBlock x:Name="textBlockComponent" Text="処理する画像成分を選択してください" Margin="10" /> 
-                    <ComboBox x:Name="comboBoxComponent" ItemsSource="{Binding}"  Margin="10"
-                        HorizontalAlignment="Left" Width="180"  SelectedValuePath="Key" DisplayMemberPath="Value"/>
-                    <Button Content="処理画像成分変更" Height="23" Width="100" Foreground="White" Background="Darkblue"
-                        HorizontalAlignment="Left" Margin="10" Click="button_Click_Component" />
-                    <TextBlock x:Name="textBlockComponent2" Text="{Binding}" FontWeight="Bold" Margin="10" />
+                    <TextBlock x:Name="textBlockContR" Text="R画像の階調変換" Margin="10" /> 
+                    <ComboBox x:Name="comboBoxContR" SelectionChanged="comboBoxContR_SelectedValueChanged" Margin="10" HorizontalAlignment="Left" Width="120" 
+                        ItemsSource="{Binding}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0" />
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Column="0" Grid.Row="0">
+                             <TextBlock x:Name="textBlock2R" Text="2値化閾値設定" 
+                                FontWeight="Bold" Margin="10" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="0">
+                            <TextBox x:Name="textBoxBinR" Text="{Binding Value, ElementName=sliderR}" 
+                                TextChanged="textBoxBinR_TextChanged" Width="50" 
+                                HorizontalAlignment="Left" Margin="10">
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2"  Grid.Row="1">
+                        <Slider x:Name="sliderR" Minimum="0" Maximum="255"
+                                TickFrequency="1" IsSnapToTickEnabled="True" Width="150" 
+                                HorizontalAlignment="Left" Margin="10" 
+                                Value="{Binding Text, ElementName=textBoxBinR}" SmallChange="1"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.Row="2">
+                            <TextBlock x:Name="textBlockConR" Text="γ値設定" 
+                                FontWeight="Bold" Margin="10" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="2">
+                            <TextBox x:Name="textBoxConR" Text="{Binding Value, ElementName=sliderConR}" 
+                                TextChanged="textBoxBinR_TextChanged" Width="50" MaxLength="5" 
+                                HorizontalAlignment="Left" Margin="10">
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2"  Grid.Row="3">
+                        <Slider x:Name="sliderConR" Minimum="0.33" Maximum="3"
+                                TickFrequency="0.01" IsSnapToTickEnabled="True" Width="150" 
+                                HorizontalAlignment="Left" Margin="10"  LargeChange="0.01"
+                                Value="{Binding Text, ElementName=textBoxConR}" SmallChange="0.01"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="3">
+            <Grid ShowGridLines="true">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Column="0" Grid.Row="0">
+                    <TextBlock x:Name="textBlockContG" Text="G画像の階調変換" Margin="10" /> 
+                    <ComboBox x:Name="comboBoxContG" SelectionChanged="comboBoxContG_SelectedValueChanged" Margin="10" HorizontalAlignment="Left" Width="120" 
+                        ItemsSource="{Binding}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0" />
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Column="0" Grid.Row="0">
+                             <TextBlock x:Name="textBlock2G" Text="2値化閾値設定" 
+                                FontWeight="Bold" Margin="10" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="0">
+                            <TextBox x:Name="textBoxBinG" Text="{Binding Value, ElementName=sliderG}" 
+                                TextChanged="textBoxBinG_TextChanged" Width="50" 
+                                HorizontalAlignment="Left" Margin="10">
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2"  Grid.Row="1">
+                        <Slider x:Name="sliderG" Minimum="0" Maximum="255"
+                                TickFrequency="1" IsSnapToTickEnabled="True" Width="150" 
+                                HorizontalAlignment="Left" Margin="10" 
+                                Value="{Binding Text, ElementName=textBoxBinG}" SmallChange="1"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.Row="2">
+                            <TextBlock x:Name="textBlockConG" Text="γ値設定" 
+                                FontWeight="Bold" Margin="10" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="2">
+                            <TextBox x:Name="textBoxConG" Text="{Binding Value, ElementName=sliderConG}" 
+                                TextChanged="textBoxBinG_TextChanged" Width="50" MaxLength="5" 
+                                HorizontalAlignment="Left" Margin="10">
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2"  Grid.Row="3">
+                        <Slider x:Name="sliderConG" Minimum="0.33" Maximum="3"
+                                TickFrequency="0.01" IsSnapToTickEnabled="True" Width="150" 
+                                HorizontalAlignment="Left" Margin="10"  LargeChange="0.01"
+                                Value="{Binding Text, ElementName=textBoxConG}" SmallChange="0.01"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="4">
+            <Grid ShowGridLines="true">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Column="0" Grid.Row="0">
+                    <TextBlock x:Name="textBlockContB" Text="B画像の階調変換" Margin="10" /> 
+                    <ComboBox x:Name="comboBoxContB" SelectionChanged="comboBoxContB_SelectedValueChanged" Margin="10" HorizontalAlignment="Left" Width="120" 
+                        ItemsSource="{Binding}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0" />
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Column="0" Grid.Row="0">
+                             <TextBlock x:Name="textBlock2B" Text="2値化閾値設定" 
+                                FontWeight="Bold" Margin="10" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="0">
+                            <TextBox x:Name="textBoxBinB" Text="{Binding Value, ElementName=sliderB}" 
+                                TextChanged="textBoxBinB_TextChanged" Width="50" 
+                                HorizontalAlignment="Left" Margin="10">
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2"  Grid.Row="1">
+                        <Slider x:Name="sliderB" Minimum="0" Maximum="255"
+                                TickFrequency="1" IsSnapToTickEnabled="True" Width="150" 
+                                HorizontalAlignment="Left" Margin="10" 
+                                Value="{Binding Text, ElementName=textBoxBinB}" SmallChange="1"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.Row="2">
+                            <TextBlock x:Name="textBlockConB" Text="γ値設定" 
+                                FontWeight="Bold" Margin="10" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="2">
+                            <TextBox x:Name="textBoxConB" Text="{Binding Value, ElementName=sliderConB}" 
+                                TextChanged="textBoxBinB_TextChanged" Width="50" MaxLength="5" 
+                                HorizontalAlignment="Left" Margin="10">
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2"  Grid.Row="3">
+                        <Slider x:Name="sliderConB" Minimum="0.33" Maximum="3"
+                                TickFrequency="0.01" IsSnapToTickEnabled="True" Width="150" 
+                                HorizontalAlignment="Left" Margin="10"  LargeChange="0.01"
+                                Value="{Binding Text, ElementName=textBoxConB}" SmallChange="0.01"/>
+                        </StackPanel>
+                    </Grid>
                 </StackPanel>
             </Grid>
         </StackPanel>
