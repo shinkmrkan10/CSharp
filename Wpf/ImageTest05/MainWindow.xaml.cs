@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
 using System.Windows.Media;
@@ -12,6 +10,9 @@ namespace ImageTest05
 {
 	public partial class MainWindow : Window
     {
+        public TestCommand TestCmd { get; set; }
+        public CloseWindow closeWindow { get; set; }
+        public ImageSave imageSave { get; set; }
         public ObservableCollection<FileName> DataFileName { get; set; }
         public Dictionary<string, string> ContDic { get; set; }
         public Dictionary<string, string> ContImageDic { get; set; }
@@ -65,6 +66,10 @@ namespace ImageTest05
             }
 
             InitializeComponent();
+            TestCmd = new TestCommand();
+            closeWindow = new CloseWindow();
+            imageSave = new ImageSave();
+            DataContext = this;
             FileNameList fileNameList = new FileNameList();
             comboBox.DataContext = fileNameList.DataFileName;
             comboBoxCont.DataContext  = ContDic;
@@ -78,7 +83,18 @@ namespace ImageTest05
             sliderConB.Value = 1.0;
             Threshold_Check();
         }
-
+/*
+        private void button_Click_Close(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+*/
+        private void buttonSubOpen_Click(object sender, RoutedEventArgs e)
+        {
+            SubWindow sw = new SubWindow();
+            sw.Owner = this;
+            sw.Show();
+        }
         private void textBoxBin_TextChanged(object sender, EventArgs e)
         {
             threshold  = (byte)Int32.Parse(textBoxBin.Text);
@@ -154,16 +170,11 @@ namespace ImageTest05
             Threshold_Check();
         }
 
-        private void button_Click_Save(object sender, RoutedEventArgs e)
+        public void button_Click_Save(object sender, RoutedEventArgs e)
         {
             string outputName = textBoxSave.Text;
             outputPath = @"C:\Image\NewImage\" + outputName + ".png";
             Create_ImageArray(filename, true);
-        }
-
-        private void button_Click_Close(object sender, RoutedEventArgs e)
-        {
-            this.Close();
         }
 
         private void Threshold_Check(){

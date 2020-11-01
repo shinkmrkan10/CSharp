@@ -6,6 +6,11 @@
         xmlns:local="clr-namespace:ImageTest05"
         mc:Ignorable="d"
         Title="画像処理" Height="640" Width="850" Background="LightGray">
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding TestCmd}" Gesture="Ctrl+A"/>
+        <KeyBinding Command="{Binding imageSave}" Gesture="Ctrl+S"/>
+        <KeyBinding Command="{Binding closeWindow}" Gesture="Ctrl+Z"/>
+    </Window.InputBindings>
 <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
     <Grid ShowGridLines="true">
         <Grid.ColumnDefinitions>
@@ -14,23 +19,45 @@
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <Image Name="image" Stretch="None" Grid.Column="0" Grid.Row="0" />
-        <Image Name="imageGray2" Stretch="None" Grid.Column="0" Grid.Row="1" />
-        <Image Name="imageRed" Stretch="None" Grid.Column="0" Grid.Row="2" />
-        <Image Name="imageGreen" Stretch="None" Grid.Column="0" Grid.Row="3" />
-        <Image Name="imageBlue" Stretch="None" Grid.Column="0" Grid.Row="4" />
-        <Image Name="imageColorNew" Stretch="None" Grid.Column="2" Grid.Row="0" />
-        <Image Name="imageBinary" Stretch="None" Grid.Column="2" Grid.Row="1" />
-        <Image Name="imageRedNew" Stretch="None" Grid.Column="2" Grid.Row="2" />
-        <Image Name="imageGreenNew" Stretch="None" Grid.Column="2" Grid.Row="3" />
-        <Image Name="imageBlueNew" Stretch="None" Grid.Column="2" Grid.Row="4" />
-        <StackPanel Grid.Column="1" Grid.Row="0">
+        <StackPanel Grid.Column="0" Grid.ColumnSpan="3">
+            <DockPanel>
+                <Menu DockPanel.Dock="Top">
+                <MenuItem Header="メニュー1(_A)" Background="LightGray">
+                    <MenuItem Header="POP UP" Command="{Binding TestCmd}" InputGestureText="Ctrl+A"/>
+                    <Separator/>
+                    <MenuItem Header="画像保存" Command="{Binding imageSave}" InputGestureText="Ctrl+S"/>
+                    <MenuItem Header="終了" Command="{Binding closeWindow}" InputGestureText="Ctrl+Z"/>
+                </MenuItem>
+                <MenuItem Header="めにゅー 2(_B)" Background="LightGray">
+                    <MenuItem Header="メニュー 2-1">
+                        <MenuItem Header="メニュー 2-1-1"/>
+                        <MenuItem Header="メニュー 2-1-2"/>
+                    </MenuItem>
+                    <MenuItem Header="終了" Command="{Binding closeWindow}" InputGestureText="Ctrl+Z"/>
+                </MenuItem>
+                </Menu>
+                <StackPanel>
+                </StackPanel>
+            </DockPanel>
+        </StackPanel>
+        <Image Name="image" Stretch="None" Grid.Column="0" Grid.Row="1" />
+        <Image Name="imageGray2" Stretch="None" Grid.Column="0" Grid.Row="2" />
+        <Image Name="imageRed" Stretch="None" Grid.Column="0" Grid.Row="3" />
+        <Image Name="imageGreen" Stretch="None" Grid.Column="0" Grid.Row="4" />
+        <Image Name="imageBlue" Stretch="None" Grid.Column="0" Grid.Row="5" />
+        <Image Name="imageColorNew" Stretch="None" Grid.Column="2" Grid.Row="1" />
+        <Image Name="imageBinary" Stretch="None" Grid.Column="2" Grid.Row="2" />
+        <Image Name="imageRedNew" Stretch="None" Grid.Column="2" Grid.Row="3" />
+        <Image Name="imageGreenNew" Stretch="None" Grid.Column="2" Grid.Row="4" />
+        <Image Name="imageBlueNew" Stretch="None" Grid.Column="2" Grid.Row="5" />
+        <StackPanel Grid.Column="1" Grid.Row="1">
             <Grid ShowGridLines="true">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
@@ -66,14 +93,21 @@
                         <TextBox x:Name="textBoxSave" Text="test" Width="50" />
                         <TextBlock Text=".png" />
                     </StackPanel>
-                    <Button Content="画像保存" Height="23" Width="100" Foreground="White" Background="Red"
+                    <Button Name="sw_show" Background="Pink" 
+                        Margin = "10" Width = "120" Height = "23"
+                        BorderBrush="Black" BorderThickness="1" 
+                        HorizontalAlignment="Left"
+                        Click="buttonSubOpen_Click" ClickMode="Press">
+                        保存画像確認
+                    </Button>
+                    <Button Content="画像保存(Ctrl+S)" Height="23" Width="100" Foreground="White" Background="Red"
                         HorizontalAlignment="Left" Margin="10" Click="button_Click_Save" />
-                    <Button Content="終了" Height="23" Width="100" Foreground="White" Background="Red"
-                        HorizontalAlignment="Left" Margin="10" Click="button_Click_Close" />
-                </StackPanel>
+                    <Button Content="終了(Ctrl+Z)" Height="23" Width="100" Foreground="White" Background="Red"
+                        HorizontalAlignment="Left" Margin="10" Command="{Binding closeWindow}" />
+               </StackPanel>
             </Grid>
         </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="1">
+        <StackPanel Grid.Column="1" Grid.Row="2">
             <Grid ShowGridLines="true">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
@@ -135,7 +169,7 @@
                 </StackPanel>
             </Grid>
         </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="2">
+        <StackPanel Grid.Column="1" Grid.Row="3">
             <Grid ShowGridLines="true">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
@@ -197,7 +231,7 @@
                 </StackPanel>
             </Grid>
         </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="3">
+        <StackPanel Grid.Column="1" Grid.Row="4">
             <Grid ShowGridLines="true">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
@@ -259,7 +293,7 @@
                 </StackPanel>
             </Grid>
         </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="4">
+        <StackPanel Grid.Column="1" Grid.Row="5">
             <Grid ShowGridLines="true">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
