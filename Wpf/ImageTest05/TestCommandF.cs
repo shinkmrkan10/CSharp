@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace ImageTest05
 {
-	public class TestCommand : ICommand
+	public class TestCommandF : ICommand
 	{
     	public event EventHandler CanExecuteChanged;
  
@@ -15,8 +15,8 @@ namespace ImageTest05
  
     	public void Execute(object parameter)
     	{
-        	MessageBox.Show("処理する画像を変更すると\nそれまでのパラメータが引き継がれます",
-			 "画像の階調処理",MessageBoxButton.OK, MessageBoxImage.Information);
+        	MessageBox.Show("スライダーの設定で\nバンドパスフィルタ、\nノッチフィルタも処理可能です。",
+			"画像のフィルタ処理",MessageBoxButton.OK, MessageBoxImage.Information);
     	}
 	}
 }

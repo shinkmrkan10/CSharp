@@ -1,26 +1,25 @@
-<Window x:Class="ImageTest05.SubWindow"
+<Window x:Class="ImageTest05.SubWindowF"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageTest05"
         mc:Ignorable="d"
-        Title="階調処理画像保存" Height="440" Width="400">
+        Title="フィルタ処理画像保存" Height="440" Width="400">
     <Grid>
     <StackPanel>
-        <Image Name="image" Stretch="None"/>
-        <TextBlock x:Name="textBlockSaveFileSub" Margin = "10" />
-        <TextBlock Name="im_save" Margin = "10" />
+        <Image Name="imageF" Stretch="None"/>
+        <TextBlock Name="im_saveF" Margin = "10" />  
         <Button Background="Yellow" 
                 Margin = "10" Width = "120" Height = "30"
                 BorderBrush="Black" BorderThickness="1" 
-                Click="imageSave">
+                Click="imageSaveF">
             画像保存
         </Button>
-        <Button Name="sw_close" Background="Yellow" 
+        <Button Name="sw_closeF" Background="Yellow" 
                 Margin = "10" Width = "120" Height = "30"
                 BorderBrush="Black" BorderThickness="1" 
-                Click="button_Click" ClickMode="Press">
+                Click="button_ClickF" ClickMode="Press">
             Close SubWindow
         </Button>
     </StackPanel>

@@ -1,6 +1,5 @@
-using System;
 using System.Collections.ObjectModel;
- 
+
 public class FileNameList {
     // バインディングの指定先プロパティ
     public ObservableCollection<FileName> DataFileName { get; set; }

@@ -1,99 +1,203 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System;
 
 namespace ImageTest05
 {
-	public partial class MainWindow : Window
+    public partial class MainWindow : Window
     {
         public TestCommand TestCmd { get; set; }
+        public TestCommandC TestCmdC { get; set; }
+        public TestCommandF TestCmdF { get; set; }
+        public FolderChange folderChange { get; set; }
         public CloseWindow closeWindow { get; set; }
         public ImageSave imageSave { get; set; }
+        public ImageSaveF imageSaveF { get; set; }
         public ObservableCollection<FileName> DataFileName { get; set; }
         public Dictionary<string, string> ContDic { get; set; }
-        public Dictionary<string, string> ContImageDic { get; set; }
-        public string filename = "C:/Image/horse2Q.jpg";
-        public string outputPath = @"C:\Image\NewImage\test.png";
-        public int effect  = 0;
-        public int effectR = 0;
-        public int effectG = 0;
-        public int effectB = 0;
-        public byte threshold  = 100;
-        public byte thresholdR = 100;
-        public byte thresholdG = 100;
-        public byte thresholdB = 100;
-        public string component = "gray2";
-        public double gamma  = 1.0;
-        public double gammaR = 1.0;
-        public double gammaG = 1.0;
-        public double gammaB = 1.0;
+        public Dictionary<string, string> ContFilterDic { get; set; }
+   		public FormatConvertedBitmap bitmap = new FormatConvertedBitmap();
+		public BitmapSource outputBitmap;
+		public BitmapSource outputFBitmap;
+		private const string CaptionSave = "Save File";
+		private const string CaptionSaveError = "Save error";
+		private const string OpenFileType = "Image Files(*.bmp;*.jpg;*.gif;*.png)|*.bmp;*.jpg;*.gif;*.png|All files (*.*)|*.*";
+		private const string SaveFileType = "(*.bmp)|*.bmp|(*.jpg)|*.jpg|(*.gif)|*.gif|(*.png)|*.png";
+        public static string foldername = @"C:\Image\"; 
+        private string filename = "C:/Image/AAcolorBar.png";
+        private string outputPath = @"C:\Image\NewImage\test.png";
+        private string outputFPath = @"C:\Image\NewImage\FFTtest.png";
+        private int effect  = 0;
+        private int effectR = 0;
+        private int effectG = 0;
+        private int effectB = 0;
+        private byte threshold  = 0;
+        private byte thresholdR = 0;
+        private byte thresholdG = 0;
+        private byte thresholdB = 0;
+        private string component = "gray2";
+        private double gamma  = 1.0;
+        private double gammaR = 1.0;
+        private double gammaG = 1.0;
+        private double gammaB = 1.0;
+		private double lowpass = 128;
+		private double lowpassR = 128;
+		private double lowpassG = 128;
+		private double lowpassB = 128;
+		private double heighpass = 0;
+		private double heighpassR = 0;
+		private double heighpassG = 0;
+		private double heighpassB = 0;
+        private int width;
+        private int height;
         public MainWindow()
         {
             ContDic = new Dictionary<string, string>()
             {
-                { "0", "グレースケール" },
+                { "0", "無変換" },
                 { "1", "2値化" },
-                { "2", "ネガポジ反転" },
-                { "3", "暗部強調" },
-                { "4", "明部強調" },
-                { "5", "中間部強調" },
-                { "6", "γ変換" },
+                { "2", "4値化" },
+                { "3", "8値化" },
+                { "4", "ネガポジ反転" },
+                { "5", "暗部強調" },
+                { "6", "明部強調" },
+                { "7", "中間部強調" },
+                { "8", "γ変換" },
             };
-            ContImageDic = new Dictionary<string, string>()
+            ContFilterDic = new Dictionary<string, string>()
             {
-                { "gray2", "グレースケール画像" },
-                { "red", "R成分画像" },
-                { "green", "G成分画像" },
-                { "blue", "B成分画像" },
+                { "0", "矩形以外未実装" },
+                { "1", "矩形フィルタ" },
+                { "2", "ガウシャンフィルタ" },
+                { "3", "LoGフィルタ" },
             };
-            string[] files = System.IO.Directory.GetFiles(@"C:\Image\", "*.*");
+
+            DataFileName = new ObservableCollection<FileName>();
+
+            string[] files = System.IO.Directory.GetFiles(foldername, "*.*");
             foreach (string s in files)
             {
                 System.IO.FileInfo fi = null;
                 try
                 {
                 fi = new System.IO.FileInfo(s);
-//				DataFileName.Add(new FileName{fname = s});
+				DataFileName.Add(new FileName{fname = s});
                 }
                 catch (System.IO.FileNotFoundException)
                 {
                     continue;
                 }
             }
-
             InitializeComponent();
+            this.SizeToContent = SizeToContent.Width;
             TestCmd = new TestCommand();
+            TestCmdC = new TestCommandC();
+            TestCmdF = new TestCommandF();
+            folderChange = new FolderChange();
             closeWindow = new CloseWindow();
             imageSave = new ImageSave();
+            imageSaveF = new ImageSaveF();
             DataContext = this;
-            FileNameList fileNameList = new FileNameList();
-            comboBox.DataContext = fileNameList.DataFileName;
-            comboBoxCont.DataContext  = ContDic;
+			comboBox.DataContext = DataFileName;
+			comboBoxCont.DataContext  = ContDic;
             comboBoxContR.DataContext = ContDic;
             comboBoxContG.DataContext = ContDic;
             comboBoxContB.DataContext = ContDic;
-            slider.Value  = 100;
+            comboBoxFilter.DataContext  = ContFilterDic;
+            comboBoxFilterR.DataContext  = ContFilterDic;
+            comboBoxFilterG.DataContext  = ContFilterDic;
+            comboBoxFilterB.DataContext  = ContFilterDic;
+            slider.Value  = 127;
             sliderCon.Value  = 1.0;
             sliderConR.Value = 1.0;
             sliderConG.Value = 1.0;
             sliderConB.Value = 1.0;
+            sliderFilter.Value  = 0;
+            sliderFilterH.Value  = 0;
             Threshold_Check();
+            ThresholdFFT_Check();
         }
-/*
-        private void button_Click_Close(object sender, RoutedEventArgs e)
-        {
-            this.Close();
+        public void folder_Change(object sender, RoutedEventArgs e){
+            var filePath = string.Empty;
+            var openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "ファイルを開く";
+            openFileDialog.InitialDirectory = foldername;
+            openFileDialog.FilterIndex = 1;
+            openFileDialog.Filter = OpenFileType;
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                //Get the path of specified file
+                filePath = openFileDialog.FileName;
+				DataFileName.Insert(0, new FileName{fname = filePath});
+                comboBox.DataContext = DataFileName; // 追加される
+                comboBox.SelectedIndex = 0;
+            }
         }
-*/
-        private void buttonSubOpen_Click(object sender, RoutedEventArgs e)
+
+        private void textBoxFilter_TextChanged(object sender, EventArgs e)
         {
-            SubWindow sw = new SubWindow();
-            sw.Owner = this;
-            sw.Show();
+            lowpass  = Double.Parse(textBoxFilter.Text);
+            lowpassR  = Double.Parse(textBoxFilter.Text);
+            lowpassG  = Double.Parse(textBoxFilter.Text);
+            lowpassB  = Double.Parse(textBoxFilter.Text);
+            heighpass  = Double.Parse(textBoxFilterH.Text);
+            heighpassR  = Double.Parse(textBoxFilterH.Text);
+            heighpassG  = Double.Parse(textBoxFilterH.Text);
+            heighpassB  = Double.Parse(textBoxFilterH.Text);
+            sliderFilter.Value  = lowpass;
+            sliderFilterR.Value  = lowpassR;
+            sliderFilterG.Value  = lowpassG;
+            sliderFilterB.Value  = lowpassB;
+            sliderFilterH.Value  = heighpass;
+            sliderFilterRH.Value  = heighpassR;
+            sliderFilterGH.Value  = heighpassG;
+            sliderFilterBH.Value  = heighpassB;
+            ThresholdFFT_Check();
+        }
+        private void textBoxFilterR_TextChanged(object sender, EventArgs e)
+        {
+            lowpassR  = Double.Parse(textBoxFilterR.Text);
+            heighpassR  = Double.Parse(textBoxFilterRH.Text);
+            sliderFilterR.Value  = lowpassR;
+            sliderFilterRH.Value  = heighpassR;
+            ThresholdFFT_Check();
+        }
+        private void textBoxFilterG_TextChanged(object sender, EventArgs e)
+        {
+            lowpassG  = Double.Parse(textBoxFilterG.Text);
+            heighpassG  = Double.Parse(textBoxFilterGH.Text);
+            sliderFilterG.Value  = lowpassG;
+            sliderFilterGH.Value  = heighpassG;
+            ThresholdFFT_Check();
+        }
+        private void textBoxFilterB_TextChanged(object sender, EventArgs e)
+        {
+            lowpassB  = Double.Parse(textBoxFilterB.Text);
+            heighpassB  = Double.Parse(textBoxFilterBH.Text);
+            sliderFilterB.Value  = lowpassB;
+            sliderFilterBH.Value  = heighpassB;
+            ThresholdFFT_Check();
+        }
+        private void comboBoxFilter_SelectedValueChanged(object sender, EventArgs e) 
+        {
+            ThresholdFFT_Check();
+        }
+        private void comboBoxFilterR_SelectedValueChanged(object sender, EventArgs e) 
+        {
+            ThresholdFFT_Check();
+        }
+        private void comboBoxFilterG_SelectedValueChanged(object sender, EventArgs e) 
+        {
+            ThresholdFFT_Check();
+        }
+        private void comboBoxFilterB_SelectedValueChanged(object sender, EventArgs e) 
+        {
+            ThresholdFFT_Check();
         }
         private void textBoxBin_TextChanged(object sender, EventArgs e)
         {
@@ -114,14 +218,12 @@ namespace ImageTest05
             sliderConB.Value = gammaB;
             Threshold_Check();
         }
-
         private void textBoxBinR_TextChanged(object sender, EventArgs e)
         {
             thresholdR = (byte)Int32.Parse(textBoxBinR.Text);
             gammaR = Double.Parse(textBoxConR.Text);
             Threshold_Check();
         }
-
         private void textBoxBinG_TextChanged(object sender, EventArgs e)
         {
             thresholdG = (byte)Int32.Parse(textBoxBinG.Text);
@@ -134,14 +236,12 @@ namespace ImageTest05
             gammaB = sliderConB.Value;
             Threshold_Check();
         }
-
-
         private void comboBox_SelectedValueChanged(object sender, EventArgs e) 
         {
             filename = comboBox.SelectedValue.ToString();
             Threshold_Check();
+            ThresholdFFT_Check();
         }
-
         private void comboBoxCont_SelectedValueChanged(object sender, EventArgs e) 
         {
             effect  = Int32.Parse(comboBoxCont.SelectedValue.ToString());
@@ -163,252 +263,114 @@ namespace ImageTest05
             effectG = Int32.Parse(comboBoxContG.SelectedValue.ToString());
             Threshold_Check();
         }
-
         private void comboBoxContB_SelectedValueChanged(object sender, EventArgs e) 
         {
             effectB = Int32.Parse(comboBoxContB.SelectedValue.ToString());
             Threshold_Check();
         }
-
         public void button_Click_Save(object sender, RoutedEventArgs e)
         {
-            string outputName = textBoxSave.Text;
-            outputPath = @"C:\Image\NewImage\" + outputName + ".png";
-            Create_ImageArray(filename, true);
+                var saveFileDialog = new SaveFileDialog();
+				saveFileDialog.Title = "ファイルを保存";
+				saveFileDialog.Filter = SaveFileType;
+				if (saveFileDialog.ShowDialog() == true)
+				{
+					// 出力path
+					outputPath = saveFileDialog.FileName;
+					if (outputPath == filename)
+					{
+						MessageBoxResult messageBoxRewrite = MessageBox.Show(
+							"元の画像は書き換えられません",
+							caption: CaptionSaveError);
+						return;
+					}
+					textBlockSaveFile.Text = outputPath;
+					// BitmapSourceを保存する
+					using (Stream stream = new FileStream(outputPath, FileMode.Create))
+					{
+                        if (outputPath.EndsWith(".bmp") || outputPath.EndsWith(".BMP")){
+						BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+						encoder.Frames.Add(BitmapFrame.Create(outputBitmap));
+						encoder.Save(stream);
+                        }
+                        if (outputPath.EndsWith(".jpg") || outputPath.EndsWith(".JPG")){
+						JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+						encoder.Frames.Add(BitmapFrame.Create(outputBitmap));
+						encoder.Save(stream);
+                        }
+                        if (outputPath.EndsWith(".gif") || outputPath.EndsWith(".GIF")){
+						GifBitmapEncoder encoder = new GifBitmapEncoder();
+						encoder.Frames.Add(BitmapFrame.Create(outputBitmap));
+						encoder.Save(stream);
+                        }
+                        if (outputPath.EndsWith(".png") || outputPath.EndsWith(".PNG"))
+					{
+						PngBitmapEncoder encoder = new PngBitmapEncoder();
+						encoder.Frames.Add(BitmapFrame.Create(outputBitmap));
+						encoder.Save(stream);
+                        }
+					}
+
+				}
+				else
+				{
+					textBlockSaveFile.Text = "キャンセルされました";
+				}
+		}
+        public void button_Click_SaveF(object sender, RoutedEventArgs e)
+        {
+				var saveFileDialogF = new SaveFileDialog();
+				saveFileDialogF.Title = "ファイルを保存";
+				saveFileDialogF.Filter = SaveFileType;
+				if (saveFileDialogF.ShowDialog() == true)
+				{
+					// 出力path
+					outputPath = saveFileDialogF.FileName;
+					if (outputPath == filename)
+					{
+						MessageBoxResult messageBoxRewriteF = MessageBox.Show(
+							"元の画像は書き換えられません",
+							caption: CaptionSaveError);
+						return;
+					}
+					textBlockSaveFileF.Text = outputPath;
+					// BitmapSourceを保存する
+					using (Stream stream = new FileStream(outputPath, FileMode.Create))
+					{
+                        if (outputFPath.EndsWith(".bmp") || outputFPath.EndsWith(".BMP")){
+						BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+						encoder.Frames.Add(BitmapFrame.Create(outputFBitmap));
+						encoder.Save(stream);
+                        }
+                        if (outputFPath.EndsWith(".jpg") || outputFPath.EndsWith(".JPG")){
+						JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+						encoder.Frames.Add(BitmapFrame.Create(outputFBitmap));
+						encoder.Save(stream);
+                        }
+                        if (outputFPath.EndsWith(".gif") || outputFPath.EndsWith(".GIF")){
+						GifBitmapEncoder encoder = new GifBitmapEncoder();
+						encoder.Frames.Add(BitmapFrame.Create(outputFBitmap));
+						encoder.Save(stream);
+                        }
+                        if (outputFPath.EndsWith(".png") || outputFPath.EndsWith(".PNG")){
+						PngBitmapEncoder encoder = new PngBitmapEncoder();
+						encoder.Frames.Add(BitmapFrame.Create(outputFBitmap));
+						encoder.Save(stream);
+                        }
+            		}
+
+				}
+				else
+				{
+					textBlockSaveFileF.Text = "キャンセルされました";
+				}
         }
-
-        private void Threshold_Check(){
-            bool repeat = true;
-            while (repeat)
-            {
-                try{
-                    Create_ImageArray(filename, false);
-                    textBoxBin.DataContext  = threshold;
-                    textBoxBinR.DataContext = thresholdR;
-                    textBoxBinG.DataContext = thresholdG;
-                    textBoxBinB.DataContext = thresholdB;
-                    textBoxCon.DataContext  = gamma;
-                    textBoxConR.DataContext = gammaR;
-                    textBoxConG.DataContext = gammaG;
-                    textBoxConB.DataContext = gammaB;
-                    repeat = false;
-                }
-                catch (FormatException)
-                {
-                    slider.Value   = 100;
-                    sliderR.Value  = 100;
-                    sliderG.Value  = 100;
-                    sliderB.Value  = 100;
-                    sliderCon.Value   = 1.0;
-                    sliderConR.Value  = 1.0;
-                    sliderConG.Value  = 1.0;
-                    sliderConB.Value  = 1.0;
-                }
-            }
-        }
-
-        private void Create_ImageArray(string filename, bool output=false){
-
-            BitmapImage bitmapimageOriginal = new BitmapImage(new Uri(filename, UriKind.RelativeOrAbsolute));
-
-            // BitmapImageのPixelFormatをPbgra32に変換する
-            FormatConvertedBitmap bitmap = new FormatConvertedBitmap(bitmapimageOriginal, PixelFormats.Pbgra32, null, 0);
-
-            int width = bitmap.PixelWidth;
-            int height = bitmap.PixelHeight;
-            byte[] originalPixels = new byte[width * height * 4];
-            byte[] red = new byte[width * height * 4];
-            byte[] green = new byte[width * height * 4];
-            byte[] blue = new byte[width * height * 4];
-            byte[] redNew = new byte[width * height * 4];
-            byte[] greenNew = new byte[width * height * 4];
-            byte[] blueNew = new byte[width * height * 4];
-            byte[] colorNew = new byte[width * height * 4];
-            byte[] gray2 = new byte[width * height * 4];
-            byte[] bi = new byte[width * height * 4];
-            byte[] lookUp  = new byte[256];
-            byte[] lookUpR = new byte[256];
-            byte[] lookUpG = new byte[256];
-            byte[] lookUpB = new byte[256];
-
-            // LookUpTable作成
-            Create_LookupTable(lookUp, effect, threshold, gamma);
-            Create_LookupTable(lookUpR, effectR, thresholdR, gammaR);
-            Create_LookupTable(lookUpG, effectG, thresholdG, gammaG);
-            Create_LookupTable(lookUpB, effectB, thresholdB, gammaB);
-            // BitmapSourceから配列にコピー
-            int stride = (width * bitmap.Format.BitsPerPixel + 7) / 8;
-            bitmap.CopyPixels(originalPixels, stride, 0);
-            // RGB要素を抜き出す
-            for (int x = 0; x < originalPixels.Length; x = x + 4)
-            {
-            // red画像作成
-                red[x] = 0;
-                red[x + 1] = 0;
-                red[x + 2] = originalPixels[x + 2];
-                red[x + 3] = 255;
-            // green画像作成
-                green[x] = 0;
-                green[x + 1] = originalPixels[x + 1];
-                green[x + 2] = 0;
-                green[x + 3] = 255;
-            // blue画像作成
-                blue[x] = originalPixels[x];
-                blue[x + 1] = 0;
-                blue[x + 2] = 0;
-                blue[x + 3] = 255;
-            // gray画像作成
-            // γ=2.2 で最適のYIQ変換
-//                byte y = (byte)(originalPixels[x + 2] * 0.299 
-//                      + originalPixels[x + 1] * 0.587 
-//                      + originalPixels[x] * 0.114);
-//                gray[x] = y;
-//                gray[x + 1] = y;
-//                gray[x + 2] = y;
-//                gray[x + 3] = 255;
-            // γ=2.2 以外で推奨のYIQ変換
-                byte y2 = (byte)(originalPixels[x + 2] * 0.3086 
-                      + originalPixels[x + 1] * 0.6094 
-                      + originalPixels[x] * 0.0820);
-                gray2[x] = y2;
-                gray2[x + 1] = y2;
-                gray2[x + 2] = y2;
-                gray2[x + 3] = 255;
-
-            // 画素変換:LookUpTable利用
-                byte y3 = (byte)lookUp[y2];
-                bi[x] = y3;
-                bi[x + 1] = y3;
-                bi[x + 2] = y3;
-                bi[x + 3] = 255;
-            // redNew画像作成
-                y3 = (byte)lookUpR[red[x + 2]];
-                redNew[x] = 0;
-                redNew[x + 1] = 0;
-                redNew[x + 2] = y3;
-                redNew[x + 3] = 255;
-            // greenNew画像作成
-                y3 = (byte)lookUpG[green[x + 1]];
-                greenNew[x] = 0;
-                greenNew[x + 1] = y3;
-                greenNew[x + 2] = 0;
-                greenNew[x + 3] = 255;
-            // blueNew画像作成
-                y3 = (byte)lookUpB[blue[x]];
-                blueNew[x] = y3;
-                blueNew[x + 1] = 0;
-                blueNew[x + 2] = 0;
-                blueNew[x + 3] = 255;
-            // colorNew画像作成
-                colorNew[x] = blueNew[x];
-                colorNew[x + 1] = greenNew[x + 1];
-                colorNew[x + 2] = redNew[x + 2];
-                colorNew[x + 3] = 255;
-            }
-
-            // ウィンドウに表示する
-            BitmapSource originalBitmap = BitmapSource.Create(width, height, 96, 96, PixelFormats.Pbgra32, null, originalPixels, stride);
-            image.Source = originalBitmap;
-            BitmapSource redBitmap = BitmapSource.Create(width, height, 96, 96, PixelFormats.Pbgra32, null, red, stride);
-            imageRed.Source = redBitmap;
-            BitmapSource greenBitmap = BitmapSource.Create(width, height, 96, 96, PixelFormats.Pbgra32, null, green, stride);
-            imageGreen.Source = greenBitmap;
-            BitmapSource blueBitmap = BitmapSource.Create(width, height, 96, 96, PixelFormats.Pbgra32, null, blue, stride);
-            imageBlue.Source = blueBitmap;
-            BitmapSource redNewBitmap = BitmapSource.Create(width, height, 96, 96, PixelFormats.Pbgra32, null, redNew, stride);
-            imageRedNew.Source = redNewBitmap;
-            BitmapSource greenNewBitmap = BitmapSource.Create(width, height, 96, 96, PixelFormats.Pbgra32, null, greenNew, stride);
-            imageGreenNew.Source = greenNewBitmap;
-            BitmapSource blueNewBitmap = BitmapSource.Create(width, height, 96, 96, PixelFormats.Pbgra32, null, blueNew, stride);
-            imageBlueNew.Source = blueNewBitmap;
-            BitmapSource colorNewBitmap = BitmapSource.Create(width, height, 96, 96, PixelFormats.Pbgra32, null, colorNew, stride);
-            imageColorNew.Source = colorNewBitmap;
-            BitmapSource gray2Bitmap = BitmapSource.Create(width, height, 96, 96, PixelFormats.Pbgra32, null, gray2, stride);
-            imageGray2.Source = gray2Bitmap;
-            BitmapSource biBitmap = BitmapSource.Create(width, height, 96, 96, PixelFormats.Pbgra32, null, bi, stride);
-            imageBinary.Source = biBitmap;
-
-            // 出力BitmapSource(outputBitmap)を作る
-            BitmapSource outputBitmap = BitmapSource.Create(width, height, 96, 96, PixelFormats.Pbgra32, null, colorNew, stride);
-
-            // 出力path
-//            outputPath = @"C:\Image\NewImage\test.png";
-            if(output == true){
-            // BitmapSourceを保存する
-                using (Stream stream = new FileStream(outputPath, FileMode.Create))
-                {
-                    PngBitmapEncoder encoder = new PngBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create(outputBitmap));
-                    encoder.Save(stream);
-                }
-            }    
-
-
-
-        }
-
-        private void Create_LookupTable(byte[] lookUp, int effect, byte threshold, double gamma){
-            // 処理選択
-            switch(effect){
-                case 1:
-            // LookUp Table作成:2値化
-                    for(int x = 0; x < threshold; x++){
-                        lookUp[x] = 0;
-                    }
-                    for(int x = threshold; x < 256; x++){
-                        lookUp[x] = 255;
-                    }
-                    break;
-                case 2:
-            // LookUp Table作成:ネガポジ反転
-                    for(int x = 0; x < 256; x++){
-                        lookUp[x] = (byte)(255 - x);
-                    }
-                    break;
-                case 3:
-            // LookUp Table作成:暗部強調
-                    for(int x = 0; x < 128; x++){
-                        lookUp[x] = (byte)(x * 2);
-                    }
-                    for(int x = 128; x < 256; x++){
-                        lookUp[x] = 255;
-                    }
-                    break;
-                case 4:
-            // LookUp Table作成:明部強調
-                    for(int x = 0; x < 128; x++){
-                        lookUp[x] = 0;
-                    }
-                    for(int x = 128; x < 256; x++){
-                        lookUp[x] = (byte)((x - 128) * 2);
-                    }
-                    break;
-                case 5:
-            // LookUp Table作成:中間部強調
-                    for(int x = 0; x < 64; x++){
-                        lookUp[x] = 0;
-                    }
-                    for(int x = 64; x < 192; x++){
-                        lookUp[x] = (byte)((x - 64) * 2);
-                    }
-                    
-                    for(int x = 192; x < 256; x++){
-                        lookUp[x] = 255;
-                    }
-                    break;
-                case 6:
-            // LookUp Table作成:γ変換
-                    for(int x = 0; x < 256; x++){
-                        lookUp[x] = (byte)(255 * Math.Pow(((double)x / 255), (1 / gamma)));
-                    }
-                    break;
-                default:
-            // LookUp Table作成:グレースケール
-                for(int x = 0; x < 256; x++){
-                    lookUp[x] = (byte)x;
-                }
-                break;
-            }
-        }
+        // ThreasholdCheck.cs : 下記記述は不要
+        // partial void Threshold_Check();
+        // ImageArray.cs
+//        partial void Create_ImageArray();
+        // LookupTable.cs
+        partial void Create_LookupTable();
     }
 }
+

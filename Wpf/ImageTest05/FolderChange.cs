@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace ImageTest05
 {
-	public class TestCommand : ICommand
+	public class FolderChange : ICommand
 	{
     	public event EventHandler CanExecuteChanged;
  
@@ -15,8 +15,13 @@ namespace ImageTest05
  
     	public void Execute(object parameter)
     	{
-        	MessageBox.Show("処理する画像を変更すると\nそれまでのパラメータが引き継がれます",
-			 "画像の階調処理",MessageBoxButton.OK, MessageBoxImage.Information);
+			var mainWindow = (Application.Current.MainWindow as MainWindow);
+			if (mainWindow != null)
+			{
+				var sender = new Object();
+				var e = new RoutedEventArgs();
+				mainWindow.folder_Change(sender, e);
+			}
     	}
 	}
 }

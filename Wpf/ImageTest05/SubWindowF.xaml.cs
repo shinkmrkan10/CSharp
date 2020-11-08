@@ -6,33 +6,32 @@ namespace ImageTest05
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class SubWindow : Window
+    public partial class SubWindowF : Window
     {
 //        public ImageSave imageSave { get; set; }
-        public SubWindow()
+        public SubWindowF()
         {
             InitializeComponent();
 //            imageSave = new ImageSave();
 
-            im_save.Text = "この画像を保存しますか？";
-            textBlockSaveFileSub.Text = "ファイルパス";
+            im_saveF.Text = "この画像を保存しますか？";  
 			var mainWindow = (Application.Current.MainWindow as MainWindow);
 			if (mainWindow != null)
 			{
-				image.Source = mainWindow.imageColorNew.Source;
+				imageF.Source = mainWindow.imageColorF.Source;
 			}
         }
-        private void imageSave(object sender, RoutedEventArgs e)
+        private void imageSaveF(object sender, RoutedEventArgs e)
         {
 			var mainWindow = (Application.Current.MainWindow as MainWindow);
 			if (mainWindow != null)
 			{
 				var sender2 = new Object();
 				var e2 = new RoutedEventArgs();
-				mainWindow.button_Click_Save(sender2, e2);
+				mainWindow.button_Click_SaveF(sender2, e2);
 			}
         }
-        private void button_Click(object sender, RoutedEventArgs e)
+        private void button_ClickF(object sender, RoutedEventArgs e)
         {
             this.Close();
         }

@@ -5,15 +5,53 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageTest05"
         mc:Ignorable="d"
-        Title="画像処理" Height="640" Width="850" Background="LightGray">
+        Title="画像処理" Height="640" Width="1280" Background="LightGray">
     <Window.InputBindings>
         <KeyBinding Command="{Binding TestCmd}" Gesture="Ctrl+A"/>
+        <KeyBinding Command="{Binding TestCmdF}" Gesture="Ctrl+B"/>
+        <KeyBinding Command="{Binding TestCmdC}" Gesture="Ctrl+D"/>
+        <KeyBinding Command="{Binding imageSaveF}" Gesture="Ctrl+F"/>
         <KeyBinding Command="{Binding imageSave}" Gesture="Ctrl+S"/>
+        <KeyBinding Command="{Binding folderChange}" Gesture="Ctrl+X"/>
         <KeyBinding Command="{Binding closeWindow}" Gesture="Ctrl+Z"/>
     </Window.InputBindings>
+<DockPanel>
+        <StackPanel DockPanel.Dock="Top">
+                <Menu DockPanel.Dock="Top">
+                <MenuItem Header="階調処理(_A)" Background="LightGray">
+  <MenuItem.Icon>
+    <Image Source="C:/Image/NewImage/menutest.png"/>
+  </MenuItem.Icon>
+                    <MenuItem Header="POP UP INFO" Command="{Binding TestCmd}" InputGestureText="Ctrl+A"/>
+                    <Separator/>
+                    <MenuItem Header="階調処理画像保存" Command="{Binding imageSave}" InputGestureText="Ctrl+S"/>
+                    <MenuItem Header="終了" Command="{Binding closeWindow}" InputGestureText="Ctrl+Z"/>
+                </MenuItem>
+                <MenuItem Header="フィルタ処理(_B)" Background="LightGray">
+  <MenuItem.Icon>
+    <Image Source="C:/Image/NewImage/FFTtest0.png"/>
+  </MenuItem.Icon>
+                    <MenuItem Header="POP UP INFO" Command="{Binding TestCmdF}" InputGestureText="Ctrl+B"/>
+                    <MenuItem Header="フィルタ処理画像保存" Command="{Binding imageSaveF}" InputGestureText="Ctrl+F"/>
+                    <MenuItem Header="終了" Command="{Binding closeWindow}" InputGestureText="Ctrl+Z"/>
+                </MenuItem>
+                <MenuItem Header="新規画像に変更(_C)" Background="LightGray">
+  <MenuItem.Icon>
+    <Image Source="C:/Image/NewImage/menutest.png"/>
+  </MenuItem.Icon>
+                    <MenuItem Header="POP UP INFO" Command="{Binding TestCmdC}" InputGestureText="Ctrl+D"/>
+                    <MenuItem Header="新規画像を開く" Command="{Binding folderChange}" InputGestureText="Ctrl+X"/>
+                    <MenuItem Header="終了" Command="{Binding closeWindow}" InputGestureText="Ctrl+Z"/>
+                </MenuItem>
+                </Menu>
+            <TextBlock>階調処理、フィルタ処理はグレースケール画像を調整するとR画像、G画像、B画像全てが変わります。
+                        R画像、G画像、B画像はそれぞれ独立に調整でき、出力画像に反映されます。</TextBlock>
+        </StackPanel>
 <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
     <Grid ShowGridLines="true">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="2*" />
@@ -25,38 +63,42 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Column="0" Grid.ColumnSpan="3">
-            <DockPanel>
-                <Menu DockPanel.Dock="Top">
-                <MenuItem Header="メニュー1(_A)" Background="LightGray">
-                    <MenuItem Header="POP UP" Command="{Binding TestCmd}" InputGestureText="Ctrl+A"/>
-                    <Separator/>
-                    <MenuItem Header="画像保存" Command="{Binding imageSave}" InputGestureText="Ctrl+S"/>
-                    <MenuItem Header="終了" Command="{Binding closeWindow}" InputGestureText="Ctrl+Z"/>
-                </MenuItem>
-                <MenuItem Header="めにゅー 2(_B)" Background="LightGray">
-                    <MenuItem Header="メニュー 2-1">
-                        <MenuItem Header="メニュー 2-1-1"/>
-                        <MenuItem Header="メニュー 2-1-2"/>
-                    </MenuItem>
-                    <MenuItem Header="終了" Command="{Binding closeWindow}" InputGestureText="Ctrl+Z"/>
-                </MenuItem>
-                </Menu>
-                <StackPanel>
-                </StackPanel>
-            </DockPanel>
+        <StackPanel Grid.Column="0" Grid.Row="0">
+            <TextBlock FontWeight="Bold">原画像</TextBlock>
         </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="0">
+            <TextBlock FontWeight="Bold">階調処理</TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Column="2" Grid.Row="0">
+            <TextBlock FontWeight="Bold">階調処理画像</TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Column="3" Grid.Row="0">
+            <TextBlock FontWeight="Bold">フィルタ処理(FFT)</TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Column="4" Grid.Row="0">
+            <TextBlock FontWeight="Bold">フィルタ処理画像</TextBlock>
+        </StackPanel>
+<!-- Grid.Column="0" Original -->
         <Image Name="image" Stretch="None" Grid.Column="0" Grid.Row="1" />
         <Image Name="imageGray2" Stretch="None" Grid.Column="0" Grid.Row="2" />
         <Image Name="imageRed" Stretch="None" Grid.Column="0" Grid.Row="3" />
         <Image Name="imageGreen" Stretch="None" Grid.Column="0" Grid.Row="4" />
         <Image Name="imageBlue" Stretch="None" Grid.Column="0" Grid.Row="5" />
+<!-- Grid.Column="2" Contrasted -->
         <Image Name="imageColorNew" Stretch="None" Grid.Column="2" Grid.Row="1" />
         <Image Name="imageBinary" Stretch="None" Grid.Column="2" Grid.Row="2" />
         <Image Name="imageRedNew" Stretch="None" Grid.Column="2" Grid.Row="3" />
         <Image Name="imageGreenNew" Stretch="None" Grid.Column="2" Grid.Row="4" />
         <Image Name="imageBlueNew" Stretch="None" Grid.Column="2" Grid.Row="5" />
+<!-- Grid.Column="4" Filtered -->
+        <Image Name="imageColorF" Stretch="None" Grid.Column="4" Grid.Row="1" />
+        <Image Name="imageGrayF" Stretch="None" Grid.Column="4" Grid.Row="2" />
+        <Image Name="imageRedF" Stretch="None" Grid.Column="4" Grid.Row="3" />
+        <Image Name="imageGreenF" Stretch="None" Grid.Column="4" Grid.Row="4" />
+        <Image Name="imageBlueF" Stretch="None" Grid.Column="4" Grid.Row="5" />
+<!-- Grid.Column="1" Grid.Row="1" color -->
         <StackPanel Grid.Column="1" Grid.Row="1">
             <Grid ShowGridLines="true">
                 <Grid.ColumnDefinitions>
@@ -67,10 +109,12 @@
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Column="0" Grid.Row="0">
-                    <TextBlock x:Name="textBlock1" Text="処理する画像を選択してください" Margin="10" /> 
-                    <ComboBox x:Name="comboBox" ItemsSource="{Binding}" Width="180" Margin="10" 
+                    <TextBlock x:Name="textBlock1" Text="画像選択" HorizontalAlignment="Center" Margin="5" /> 
+                    <ComboBox x:Name="comboBox" ItemsSource="{Binding}" Width="180" Margin="5" 
                         SelectionChanged= "comboBox_SelectedValueChanged" SelectedValuePath="fname" 
-                        DisplayMemberPath="fname" HorizontalAlignment="Left" SelectedIndex="8"/>
+                        DisplayMemberPath="fname" HorizontalAlignment="Center" SelectedIndex="0"/>
+                    <Button Content="新規画像を開く(Ctrl+X)" Height="23" Width="150" Foreground="Black" Background="Pink"
+                        HorizontalAlignment="Center" Margin="5" Click="folder_Change" />
                 </StackPanel>
                 <StackPanel Grid.Column="0" Grid.Row="1">
                     <Grid>
@@ -87,26 +131,16 @@
                     </Grid>
                 </StackPanel>
                 <StackPanel Grid.Column="0" Grid.Row="1">
-                    <TextBlock Text="右の画像を出力します =>" FontWeight="Bold" Margin="10" />
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="C:/Image/NewImage/" />
-                        <TextBox x:Name="textBoxSave" Text="test" Width="50" />
-                        <TextBlock Text=".png" />
-                    </StackPanel>
-                    <Button Name="sw_show" Background="Pink" 
-                        Margin = "10" Width = "120" Height = "23"
-                        BorderBrush="Black" BorderThickness="1" 
-                        HorizontalAlignment="Left"
-                        Click="buttonSubOpen_Click" ClickMode="Press">
-                        保存画像確認
-                    </Button>
-                    <Button Content="画像保存(Ctrl+S)" Height="23" Width="100" Foreground="White" Background="Red"
-                        HorizontalAlignment="Left" Margin="10" Click="button_Click_Save" />
+                    <Button Content="画像保存(Ctrl+S)" Height="23" Width="100" Foreground="Black" Background="Pink"
+                        HorizontalAlignment="Center" Margin="10" Click="button_Click_Save" />
+                    <TextBlock Text="右の画像を出力します =>" FontWeight="Bold" HorizontalAlignment="Center" Margin="5" />
+                    <TextBlock x:Name="textBlockSaveFile" FontWeight="Bold" HorizontalAlignment="Center" Margin="5" />
                     <Button Content="終了(Ctrl+Z)" Height="23" Width="100" Foreground="White" Background="Red"
-                        HorizontalAlignment="Left" Margin="10" Command="{Binding closeWindow}" />
+                        HorizontalAlignment="Center" Margin="5" Command="{Binding closeWindow}" />
                </StackPanel>
             </Grid>
         </StackPanel>
+<!-- Grid.Column="1" Grid.Row="2" gray -->
         <StackPanel Grid.Column="1" Grid.Row="2">
             <Grid ShowGridLines="true">
                 <Grid.ColumnDefinitions>
@@ -117,8 +151,8 @@
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Column="0" Grid.Row="0">
-                    <TextBlock x:Name="textBlockCont" Text="グレースケール画像の階調変換" Margin="10" /> 
-                    <ComboBox x:Name="comboBoxCont" SelectionChanged="comboBoxCont_SelectedValueChanged" Margin="10" HorizontalAlignment="Left" Width="120" 
+                    <TextBlock x:Name="textBlockCont" Text="グレースケール画像の階調変換" HorizontalAlignment="Center" Margin="5" /> 
+                    <ComboBox x:Name="comboBoxCont" SelectionChanged="comboBoxCont_SelectedValueChanged" HorizontalAlignment="Center" Margin="5" Width="120" 
                         ItemsSource="{Binding}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0" />
                 </StackPanel>
                 <StackPanel Grid.Column="0" Grid.Row="1">
@@ -169,6 +203,7 @@
                 </StackPanel>
             </Grid>
         </StackPanel>
+<!-- Grid.Column="1" Grid.Row="3" red -->
         <StackPanel Grid.Column="1" Grid.Row="3">
             <Grid ShowGridLines="true">
                 <Grid.ColumnDefinitions>
@@ -179,8 +214,8 @@
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Column="0" Grid.Row="0">
-                    <TextBlock x:Name="textBlockContR" Text="R画像の階調変換" Margin="10" /> 
-                    <ComboBox x:Name="comboBoxContR" SelectionChanged="comboBoxContR_SelectedValueChanged" Margin="10" HorizontalAlignment="Left" Width="120" 
+                    <TextBlock x:Name="textBlockContR" Text="R画像の階調変換" HorizontalAlignment="Center" Margin="5" /> 
+                    <ComboBox x:Name="comboBoxContR" SelectionChanged="comboBoxContR_SelectedValueChanged" HorizontalAlignment="Center" Margin="5" Width="120" 
                         ItemsSource="{Binding}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0" />
                 </StackPanel>
                 <StackPanel Grid.Column="0" Grid.Row="1">
@@ -231,6 +266,7 @@
                 </StackPanel>
             </Grid>
         </StackPanel>
+<!-- Grid.Column="1" Grid.Row="4" green -->
         <StackPanel Grid.Column="1" Grid.Row="4">
             <Grid ShowGridLines="true">
                 <Grid.ColumnDefinitions>
@@ -241,8 +277,8 @@
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Column="0" Grid.Row="0">
-                    <TextBlock x:Name="textBlockContG" Text="G画像の階調変換" Margin="10" /> 
-                    <ComboBox x:Name="comboBoxContG" SelectionChanged="comboBoxContG_SelectedValueChanged" Margin="10" HorizontalAlignment="Left" Width="120" 
+                    <TextBlock x:Name="textBlockContG" Text="G画像の階調変換" HorizontalAlignment="Center" Margin="5" /> 
+                    <ComboBox x:Name="comboBoxContG" SelectionChanged="comboBoxContG_SelectedValueChanged" HorizontalAlignment="Center" Margin="5" Width="120" 
                         ItemsSource="{Binding}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0" />
                 </StackPanel>
                 <StackPanel Grid.Column="0" Grid.Row="1">
@@ -293,6 +329,7 @@
                 </StackPanel>
             </Grid>
         </StackPanel>
+<!-- Grid.Column="1" Grid.Row="5" blue -->
         <StackPanel Grid.Column="1" Grid.Row="5">
             <Grid ShowGridLines="true">
                 <Grid.ColumnDefinitions>
@@ -303,8 +340,8 @@
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Column="0" Grid.Row="0">
-                    <TextBlock x:Name="textBlockContB" Text="B画像の階調変換" Margin="10" /> 
-                    <ComboBox x:Name="comboBoxContB" SelectionChanged="comboBoxContB_SelectedValueChanged" Margin="10" HorizontalAlignment="Left" Width="120" 
+                    <TextBlock x:Name="textBlockContB" Text="B画像の階調変換" HorizontalAlignment="Center" Margin="5" /> 
+                    <ComboBox x:Name="comboBoxContB" SelectionChanged="comboBoxContB_SelectedValueChanged" HorizontalAlignment="Center" Margin="5" Width="120" 
                         ItemsSource="{Binding}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0" />
                 </StackPanel>
                 <StackPanel Grid.Column="0" Grid.Row="1">
@@ -355,6 +392,299 @@
                 </StackPanel>
             </Grid>
         </StackPanel>
+<!-- Grid.Column="3" Grid.Row="1" color -->
+        <StackPanel Grid.Column="3" Grid.Row="1">
+            <Grid ShowGridLines="true">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Column="0" Grid.Row="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="0">
+                    <DockPanel Height="76">
+                        <TextBlock Text="縦、横の画素数が&#10;2のべき乗の画像のみ&#10;処理します" 
+                            Margin="15" />
+                    </DockPanel>
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="1">
+                    <Button Content="画像保存(Ctrl+F)" Height="23" Width="100" Foreground="Black" Background="Pink"
+                        HorizontalAlignment="Center" Margin="10" Click="button_Click_SaveF" />
+                    <TextBlock Text="右の画像を出力します =>" FontWeight="Bold" HorizontalAlignment="Center" Margin="5" />
+                    <TextBlock x:Name="textBlockSaveFileF" FontWeight="Bold" HorizontalAlignment="Center" Margin="5" />
+                    <Button Content="終了(Ctrl+Z)" Height="23" Width="100" Foreground="White" Background="Red"
+                        HorizontalAlignment="Center" Margin="5" Command="{Binding closeWindow}" />
+               </StackPanel>
+            </Grid>
+        </StackPanel>
+<!-- Grid.Column="3" Grid.Row="2" gray -->
+        <StackPanel Grid.Column="3" Grid.Row="2">
+            <Grid ShowGridLines="true">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Column="0" Grid.Row="0">
+                    <TextBlock x:Name="textBlockFilter" Text="グレースケール画像のフィルタ処理" HorizontalAlignment="Center" Margin="5" /> 
+                    <ComboBox x:Name="comboBoxFilter" SelectionChanged="comboBoxFilter_SelectedValueChanged" HorizontalAlignment="Center" Margin="5" Width="120" 
+                        ItemsSource="{Binding}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0" />
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Column="0" Grid.Row="0">
+                             <TextBlock x:Name="textBlockFilter2" Text="ローパスフィルタ設定" 
+                                FontWeight="Bold" Margin="10" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="0">
+                            <TextBox x:Name="textBoxFilter" Text="{Binding Value, ElementName=sliderFilter}" 
+                                TextChanged="textBoxFilter_TextChanged" Width="50" 
+                                HorizontalAlignment="Left" Margin="10">
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2"  Grid.Row="1">
+                        <Slider x:Name="sliderFilter" Minimum="0" Maximum="128"
+                                TickFrequency="1" IsSnapToTickEnabled="True" Width="150" 
+                                HorizontalAlignment="Left" Margin="10" LargeChange="10"
+                                Value="{Binding Text, ElementName=textBoxFilter}" SmallChange="1"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.Row="2">
+                            <TextBlock x:Name="textBlockFilterH" Text="ハイパスフィルタ設定" 
+                                FontWeight="Bold" Margin="10" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="2">
+                            <TextBox x:Name="textBoxFilterH" Text="{Binding Value, ElementName=sliderFilterH}" 
+                                TextChanged="textBoxFilter_TextChanged" Width="50" MaxLength="5" 
+                                HorizontalAlignment="Left" Margin="10">
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2"  Grid.Row="3">
+                        <Slider x:Name="sliderFilterH" Minimum="0" Maximum="128"
+                                TickFrequency="1" IsSnapToTickEnabled="True" Width="150" 
+                                HorizontalAlignment="Left" Margin="10" LargeChange="10"
+                                Value="{Binding Text, ElementName=textBoxFilterH}" SmallChange="1"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+<!-- Grid.Column="3" Grid.Row="3" red -->
+        <StackPanel Grid.Column="3" Grid.Row="3">
+            <Grid ShowGridLines="true">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Column="0" Grid.Row="0">
+                    <TextBlock x:Name="textBlockFilterR" Text="R画像のフィルタ処理" HorizontalAlignment="Center" Margin="5" /> 
+                    <ComboBox x:Name="comboBoxFilterR" SelectionChanged="comboBoxFilterR_SelectedValueChanged" HorizontalAlignment="Center" Margin="5" Width="120" 
+                        ItemsSource="{Binding}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0" />
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Column="0" Grid.Row="0">
+                             <TextBlock x:Name="textBlockFilterR2" Text="ローパスフィルタ設定" 
+                                FontWeight="Bold" Margin="10" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="0">
+                            <TextBox x:Name="textBoxFilterR" Text="{Binding Value, ElementName=sliderFilterR}" 
+                                TextChanged="textBoxFilterR_TextChanged" Width="50" 
+                                HorizontalAlignment="Left" Margin="10">
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2"  Grid.Row="1">
+                        <Slider x:Name="sliderFilterR" Minimum="0" Maximum="128"
+                                TickFrequency="1" IsSnapToTickEnabled="True" Width="150" 
+                                HorizontalAlignment="Left" Margin="10" LargeChange="10"
+                                Value="{Binding Text, ElementName=textBoxFilterR}" SmallChange="1"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.Row="2">
+                            <TextBlock x:Name="textBlockFilterRH" Text="ハイパスフィルタ設定" 
+                                FontWeight="Bold" Margin="10" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="2">
+                            <TextBox x:Name="textBoxFilterRH" Text="{Binding Value, ElementName=sliderFilterRH}" 
+                                TextChanged="textBoxFilterR_TextChanged" Width="50" MaxLength="5" 
+                                HorizontalAlignment="Left" Margin="10">
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2"  Grid.Row="3">
+                        <Slider x:Name="sliderFilterRH" Minimum="0" Maximum="128"
+                                TickFrequency="1" IsSnapToTickEnabled="True" Width="150" 
+                                HorizontalAlignment="Left" Margin="10"  LargeChange="10"
+                                Value="{Binding Text, ElementName=textBoxFilterRH}" SmallChange="1"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+<!-- Grid.Column="3" Grid.Row="4" green -->
+        <StackPanel Grid.Column="3" Grid.Row="4">
+            <Grid ShowGridLines="true">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Column="0" Grid.Row="0">
+                    <TextBlock x:Name="textBlockFilterG" Text="G画像のフィルタ処理" HorizontalAlignment="Center" Margin="5" /> 
+                    <ComboBox x:Name="comboBoxFilterG" SelectionChanged="comboBoxFilterG_SelectedValueChanged" HorizontalAlignment="Center" Margin="5" Width="120" 
+                        ItemsSource="{Binding}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0" />
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Column="0" Grid.Row="0">
+                             <TextBlock x:Name="textBlockFilterG2" Text="ローパスフィルタ設定" 
+                                FontWeight="Bold" Margin="10" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="0">
+                            <TextBox x:Name="textBoxFilterG" Text="{Binding Value, ElementName=sliderFilterG}" 
+                                TextChanged="textBoxFilterG_TextChanged" Width="50" 
+                                HorizontalAlignment="Left" Margin="10">
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2"  Grid.Row="1">
+                        <Slider x:Name="sliderFilterG" Minimum="0" Maximum="128"
+                                TickFrequency="1" IsSnapToTickEnabled="True" Width="150" 
+                                HorizontalAlignment="Left" Margin="10" LargeChange="10"
+                                Value="{Binding Text, ElementName=textBoxFilterG}" SmallChange="1"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.Row="2">
+                            <TextBlock x:Name="textBlockFilterGH" Text="ハイパスフィルタ設定" 
+                                FontWeight="Bold" Margin="10" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="2">
+                            <TextBox x:Name="textBoxFilterGH" Text="{Binding Value, ElementName=sliderFilterGH}" 
+                                TextChanged="textBoxFilterG_TextChanged" Width="50" MaxLength="5" 
+                                HorizontalAlignment="Left" Margin="10">
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2"  Grid.Row="3">
+                        <Slider x:Name="sliderFilterGH" Minimum="0" Maximum="128"
+                                TickFrequency="1" IsSnapToTickEnabled="True" Width="150" 
+                                HorizontalAlignment="Left" Margin="10"  LargeChange="10"
+                                Value="{Binding Text, ElementName=textBoxFilterGH}" SmallChange="1"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+<!-- Grid.Column="3" Grid.Row="5" blue -->
+        <StackPanel Grid.Column="3" Grid.Row="5">
+            <Grid ShowGridLines="true">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Column="0" Grid.Row="0">
+                    <TextBlock x:Name="textBlockFilterB" Text="B画像のフィルタ処理" HorizontalAlignment="Center" Margin="5" /> 
+                    <ComboBox x:Name="comboBoxFilterB" SelectionChanged="comboBoxFilterB_SelectedValueChanged" HorizontalAlignment="Center" Margin="5" Width="120" 
+                        ItemsSource="{Binding}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0" />
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Column="0" Grid.Row="0">
+                             <TextBlock x:Name="textBlockFilterB2" Text="ローパスフィルタ設定" 
+                                FontWeight="Bold" Margin="10" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="0">
+                            <TextBox x:Name="textBoxFilterB" Text="{Binding Value, ElementName=sliderFilterB}" 
+                                TextChanged="textBoxFilterB_TextChanged" Width="50" 
+                                HorizontalAlignment="Left" Margin="10">
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2"  Grid.Row="1">
+                        <Slider x:Name="sliderFilterB" Minimum="0" Maximum="128"
+                                TickFrequency="1" IsSnapToTickEnabled="True" Width="150" 
+                                HorizontalAlignment="Left" Margin="10" LargeChange="10"
+                                Value="{Binding Text, ElementName=textBoxFilterB}" SmallChange="1"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.Row="2">
+                            <TextBlock x:Name="textBlockFilterBH" Text="ハイパスフィルタ設定" 
+                                FontWeight="Bold" Margin="10" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="2">
+                            <TextBox x:Name="textBoxFilterBH" Text="{Binding Value, ElementName=sliderFilterBH}" 
+                                TextChanged="textBoxFilterB_TextChanged" Width="50" MaxLength="5" 
+                                HorizontalAlignment="Left" Margin="10">
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2"  Grid.Row="3">
+                        <Slider x:Name="sliderFilterBH" Minimum="0" Maximum="128"
+                                TickFrequency="1" IsSnapToTickEnabled="True" Width="150" 
+                                HorizontalAlignment="Left" Margin="10"  LargeChange="10" 
+                                Value="{Binding Text, ElementName=textBoxFilterBH}" SmallChange="1"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
     </Grid>
 </ScrollViewer>
+</DockPanel>
 </Window>
