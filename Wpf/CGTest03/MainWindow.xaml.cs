@@ -44,6 +44,8 @@ namespace CGTest03
             tempDataS = new ObservableCollection<ShapeElement>();
             dataGrid1.DataContext = DataS;
             comboBoxColor.DataContext = ColorDic;
+            rectRadioButton.IsChecked = true;
+            button_reset();
         }
 
         // 操作対象のエレメント名
@@ -68,6 +70,8 @@ namespace CGTest03
         private string elementFlattening = "1.0";
         // 操作対象のエレメントのid
         private int count = 0;
+        // エレメント修正中フラグ
+        private bool _isReshape = false;
         // マウス押下中フラグ
         private bool _isMouseDown;
         // マウスの移動が開始されたときの座標
@@ -124,6 +128,7 @@ namespace CGTest03
             elementLeft += offsetX;
             elementTop += offsetY;
             textForm();
+            button_moving();
 			// 操作対象の図形をTargetに取得
 			//            moveElement.Text = elementName;
 			elementName = moveElement.Text;
@@ -145,7 +150,6 @@ namespace CGTest03
 				    // 移動開始点を現在位置で更新する
     				// （今回の現在位置が次回のMouseMoveイベントハンドラで使われる移動開始点となる）
 	    			_startPoint = _currentPoint;
-
 
 		    		e.Handled = true;
 			    }
@@ -189,7 +193,7 @@ namespace CGTest03
                 if (cell != null)
                 {
                     // ここでcellの内容を処理
-                    // （cell.DataContextにバインドされたものが入っているかと思います）
+                    // （cell.DataContextにバインドされたものが入っている）
                     var preText = "System.Windows.Controls.TextBox: ";
                     var cellInfo = dataGrid1.SelectedCells[0];
                     var cellContent = cellInfo.Column.GetCellContent(cellInfo.Item);
@@ -217,7 +221,10 @@ namespace CGTest03
         }
         // dataGrid1をリフレッシュ
         private void dataRefresh(object sender, RoutedEventArgs e)
-//        private void dataRefresh()
+        {
+            _dataRefresh();
+        }
+        private void _dataRefresh()
         {
             tempDataS.Clear();
             var rCount = DataS.Count;
@@ -227,7 +234,7 @@ namespace CGTest03
                 var same = true;
                 for (int after = row + 1 ; after < rCount; after++)
                 {
-                    if(DataS[after].name == tempName)
+                    if(DataS[after].name == tempName || tempName == moveElement.Text)
                     {
                         same = false;
                         break;
@@ -274,11 +281,6 @@ namespace CGTest03
         // エレメントの削除
         private void deleteShape(object sender, RoutedEventArgs e)
         {
-//DataS.Clear(); // 全データ削除　OK
-//foreach (ListViewItem item in dataGrid1.SelectedItems)
-//{
-//    dataGrid1.Items.Remove(item);
-//}
             elementName = moveElement.Text;
             foreach (ShapeElement dS in DataS){
         		if(elementName == dS.name){
@@ -286,71 +288,54 @@ namespace CGTest03
                     {
                         var Target = (Rectangle)LogicalTreeHelper.FindLogicalNode(canvas, elementName);
                         canvas.Children.Remove(Target);
-//                                moveElement.Text = "Changed";
                         foreach (ShapeElement dS2 in DataS){
                             if (dS2.name == elementName){
                                 var item = DataS.LastOrDefault(i => i.name == moveElement.Text);
                                 dataGrid1.BeginEdit();
-//                                dataGrid1.Items.Remove(dS2); //NG
                                 dataGrid1.CommitEdit();
-//                                moveElement.Text = "Changed"; // ok
-//                                 moveElement.Text = dS2.color;  // ok
-//                                dS2.color = "Black"; // NOP
-//                                dS2.name = "rect9"; // NOP
                             }
-/*                var item1 = DataS.LastOrDefault(x => x.name == elementName);
-				if (item1 != null)
-				{
-//						    item1.name = "test";  // NG
-//                        moveElement.Text = "Changed"; // ok
-//                        moveElement.Text = item1.color;  // ok
-						}*/
                         }
-
-
-//                        DataS.Remove(dS);
-//               	        var item = DataS.LastOrDefault(i => i.name == moveElement.Text);
-//                            DataS.Remove(item);
-//DataS.Clear();
-//                        dataGrid1.Items.Remove(Target);
-/*    foreach (ListViewItem itemx in dataGrid1.Items)
-    {
-        // nameがelementNameの場合に削除する
-//        if (itemx. == elementName)
-            dataGrid1.Items.RemoveAt(0);
-    }*/
-                        
                     }
-                    
                     else
                     {
                         var Target = (Ellipse)LogicalTreeHelper.FindLogicalNode(canvas, elementName);
                         Target.Stroke=Brushes.Blue;
-//                        Target.StrokeThickness = 2;
-//                        zIndex.Text = dS.z.ToString();
                         canvas.Children.Remove(Target);
-//                                moveElement.Text = "Changed";
                         foreach (ShapeElement dS2 in DataS){
                             if (dS2.name == elementName){
                                 var item = DataS.LastOrDefault(i => i.name == moveElement.Text);
                                 dataGrid1.BeginEdit();
-//                                dataGrid1.Items.Remove(dS2); //NG
                                 dataGrid1.CommitEdit();
-//                                moveElement.Text = "Changed"; // ok
-//                                 moveElement.Text = dS2.color;  // ok
-//                                dS2.color = "Black"; // NOP
-//                                dS2.name = "rect9"; // NOP
                             }
                         }
                     }
                 }
             }
+            tempDataS.Clear();
+            var rCount = DataS.Count;
+            for (int row = 0; row < rCount; row++ )
+            {
+                var tempName = DataS[row].name;
+                    if(elementName == tempName)
+                    {
+                        continue;
+                    }
+                
+                    tempDataS.Add(DataS[row]);
+            }
+            DataS.Clear();
+            foreach (ShapeElement dS in tempDataS){
+                DataS.Add(dS);
+            }
+
 //            count--;
         }
         // エレメントの更新
         private void updateShape(object sender, EventArgs e)
         {
             elementName = moveElement.Text;
+            _isReshape = true;
+//            shapeRadioButton();
 /*            elementTop = double.Parse(textBoxTop.Text);
             elementLeft = double.Parse(textBoxLeft.Text);
             elementWidth = moveWidth.Text;
@@ -374,6 +359,7 @@ namespace CGTest03
                 }
             }
 //            dataRefresh();
+            button_reshape();
             count--;
         }
         // 新規エレメントを登録し次のエレメント入力へ
@@ -496,6 +482,11 @@ namespace CGTest03
                 var rec = (Ellipse)LogicalTreeHelper.FindLogicalNode(canvas, moveElement.Text);
                 canvas.Children.Remove(element: rec);
             }
+            if(_isReshape)
+            {
+                _dataRefresh();
+            }
+            button_reset();
         }
 
         // 左へ+1移動
@@ -503,6 +494,7 @@ namespace CGTest03
         {
 			// 移動対象の図形をTargetに取得
 			elementName = moveElement.Text;
+            button_moving();
             if(elementName.Substring(0,4) == "rect")
             {
 		     	var Target = (Rectangle)LogicalTreeHelper.FindLogicalNode(canvas, elementName);
@@ -531,6 +523,7 @@ namespace CGTest03
         {
 			// 移動対象の図形をTargetに取得
 			elementName = moveElement.Text;
+            button_moving();
             if(elementName.Substring(0,4) == "rect")
             {
 		     	var Target = (Rectangle)LogicalTreeHelper.FindLogicalNode(canvas, elementName);
@@ -559,6 +552,7 @@ namespace CGTest03
         {
 			// 移動対象の図形をTargetに取得
 			elementName = moveElement.Text;
+            button_moving();
 			if (elementName.Substring(0, 4) != "rect")
 			{
 				var Target = (Ellipse)LogicalTreeHelper.FindLogicalNode(canvas, elementName);
@@ -587,6 +581,7 @@ namespace CGTest03
         {
 			// 移動対象の図形をTargetに取得
 			elementName = moveElement.Text;
+            button_moving();
 			if (elementName.Substring(0, 4) != "rect")
 			{
 				var Target = (Ellipse)LogicalTreeHelper.FindLogicalNode(canvas, elementName);
@@ -615,6 +610,7 @@ namespace CGTest03
         {
 			// 移動対象の図形をTargetに取得
 			elementName = moveElement.Text;
+            button_moving();
             if(elementName.Substring(0,4) == "rect")
             {
 		     	var Target = (Rectangle)LogicalTreeHelper.FindLogicalNode(canvas, elementName);
@@ -643,6 +639,7 @@ namespace CGTest03
         {
 			// 移動対象の図形をTargetに取得
 			elementName = moveElement.Text;
+            button_moving();
             if(elementName.Substring(0,4) == "rect")
             {
 		     	var Target = (Rectangle)LogicalTreeHelper.FindLogicalNode(canvas, elementName);
@@ -671,6 +668,7 @@ namespace CGTest03
         {
 			// 移動対象の図形をTargetに取得
 			elementName = moveElement.Text;
+            button_moving();
             if(elementName.Substring(0,4) == "rect")
             {
 		     	var Target = (Rectangle)LogicalTreeHelper.FindLogicalNode(canvas, elementName);
@@ -699,6 +697,7 @@ namespace CGTest03
         {
 			// 移動対象の図形をTargetに取得
 			elementName = moveElement.Text;
+            button_moving();
             if(elementName.Substring(0,4) == "rect")
             {
 		     	var Target = (Rectangle)LogicalTreeHelper.FindLogicalNode(canvas, elementName);
@@ -727,6 +726,7 @@ namespace CGTest03
         {
 			// 操作対象の図形をTargetに取得
 			elementName = moveElement.Text;
+            button_moving();
             if(elementName.Substring(0,4) == "rect")
             {
     			var Target = (Rectangle)LogicalTreeHelper.FindLogicalNode(canvas, elementName);
@@ -759,6 +759,7 @@ namespace CGTest03
         {
 			// 操作対象の図形をTargetに取得
 			elementName = moveElement.Text;
+            button_moving();
             if(elementName.Substring(0,4) == "rect")
             {
     			var Target = (Rectangle)LogicalTreeHelper.FindLogicalNode(canvas, elementName);
@@ -798,7 +799,7 @@ namespace CGTest03
             }
             catch (ArgumentOutOfRangeException e)
             {
-                var eM = e.Message;
+                var eM = e.Message; // dummy
             }
             try
             {
@@ -807,14 +808,16 @@ namespace CGTest03
             }
             catch (ArgumentOutOfRangeException e)
             {
-                var eM = e.Message;
+                var eM = e.Message; // dummy
             }
         }
         // エレメント入力初期化
         private void addInit(string elementName)
         {
                     count++;
+//                    rectRadioButton.IsChecked = true;
                     moveElement.Text = elementName+count;
+                    button_reset();
                     comboBoxColor.SelectedIndex = 0;
                     moveWidth.Text = "100";
                     moveHeight.Text = "100";
@@ -823,6 +826,27 @@ namespace CGTest03
                     elementLeft = 0;
                     textBoxTop.Text = elementTop.ToString();
                     textBoxLeft.Text = elementLeft.ToString();
+        }
+        // ボタンカラー初期値
+        private void button_reset()
+        {
+                    button1.Background = Brushes.Orange;
+                    buttonNext.Background = Brushes.LightGray;
+                    button2.Background = Brushes.LightGray;
+        }
+        // ボタンカラー形状変更時
+        private void button_reshape()
+        {
+                    button1.Background = Brushes.LightGray;
+                    buttonNext.Background = Brushes.Orange;
+                    button2.Background = Brushes.LightGray;
+        }
+        // ボタンカラー移動中
+        private void button_moving()
+        {
+                    button1.Background = Brushes.LightGray;
+                    buttonNext.Background = Brushes.Orange;
+                    button2.Background = Brushes.Orange;
         }
         // カラー選択comboBox設定
         private void comboBoxColor_SelectedValueChanged(object sender, EventArgs e) 
