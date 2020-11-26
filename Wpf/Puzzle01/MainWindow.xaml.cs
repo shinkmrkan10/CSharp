@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -231,10 +232,23 @@ namespace Puzzle01
         }
         public void folder_Change(object sender, RoutedEventArgs e){
             //            var fileContent = string.Empty;
+            Assembly myAssembly = Assembly.GetEntryAssembly();
+            string path = myAssembly.Location;
+
             textBlock2.Text = "座標";
             var filePath = string.Empty;
             var openFileDialog = new OpenFileDialog();
             openFileDialog.Title = "ファイルを開く";
+//            openFileDialog.InitialDirectory = foldername;
+            int found = 0;
+            string s1 = string.Empty;
+            string s2 = path;
+            do{                    
+                found = s2.IndexOf(@"\");
+                s1 += s2.Substring(0, found +1);
+                s2 = s2.Substring(found +1);
+            }while(found != -1);
+            foldername = s1+"Image";
             openFileDialog.InitialDirectory = foldername;
             openFileDialog.FilterIndex = 1;
             openFileDialog.Filter = OpenFileType;
