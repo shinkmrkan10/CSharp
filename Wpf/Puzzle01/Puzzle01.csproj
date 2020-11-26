@@ -4,9 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
-  </PropertyGroup>
-<PropertyGroup>
- <ApplicationIcon>kimuraKGU.ico</ApplicationIcon>
+    <ApplicationIcon>kimuraKGU.ico</ApplicationIcon>
  </PropertyGroup>
 
 </Project>
