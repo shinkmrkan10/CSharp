@@ -87,7 +87,7 @@ namespace Speech02
     		if (mainWindow != null )
 	    	{
                 // "終了"　でアプリを閉じる
-                if(value == "終わり" || value == "終り" || value == "終了" || value == "おわり"){
+                if(value.Contains("終") || value.Contains("おわり")){
 	    		    mainWindow.Close();
                 }
             }
@@ -102,14 +102,14 @@ namespace Speech02
                     return;
                 }
                 mainWindow.bColor.Text = value;
-                if(value == "色は赤" || value == "いろは赤")
+                if(value.Contains("赤"))
                 {
                     mainWindow.bColor.Background = Brushes.Red;
                     r = 255;
                     g = 0;
                     b = 0;
                 }
-                else if(value == "色は青" || value == "いろは青")
+                else if(value.Contains("青"))
                 {
                     mainWindow.bColor.Background = Brushes.Blue;
                     mainWindow.bColor.Foreground = Brushes.White;
@@ -117,7 +117,7 @@ namespace Speech02
                     g = 0;
                     b = 255;
                 }
-                else if(value == "色は緑" || value == "いろは緑")
+                else if(value.Contains("緑"))
                 {
                     mainWindow.bColor.Background = Brushes.Green;
                     mainWindow.bColor.Foreground = Brushes.White;
@@ -125,49 +125,49 @@ namespace Speech02
                     g = 0x80;
                     b = 0;
                 }
-                else if(value == "色は黄色" || value == "いろは黄色" || value == "いろはきいろ")
+                else if(value.Contains("黄"))
                 {
                     mainWindow.bColor.Background = Brushes.Yellow;
                     r = 255;
                     g = 255;
                     b = 0;
                 }
-                else if(value == "色はピンク"  || value == "いろはぴんく")
+                else if(value.Contains("ピンク"))
                 {
                     mainWindow.bColor.Background = Brushes.Pink;
                     r = 0xff;
                     g = 0xc0;
                     b = 0xcb;
                 }
-                else if(value == "色はオレンジ"  || value == "いろはおれんじ")
+                else if(value.Contains("オレンジ"))
                 {
                     mainWindow.bColor.Background = Brushes.Orange;
                     r = 0xff;
                     g = 0xa5;
                     b = 0x00;
                 }
-                else if(value == "色は紫" || value == "いろはむらさき")
+                else if(value.Contains("紫"))
                 {
                     mainWindow.bColor.Background = Brushes.Purple;
                     mainWindow.bColor.Foreground = Brushes.White;
                     r = 0x80;
                     g = 0x00;
                     b = 0x80;}
-                else if(value == "色は灰色" || value == "いろははいいろ")
+                else if(value.Contains("灰"))
                 {
                     mainWindow.bColor.Background = Brushes.Gray;
                     mainWindow.bColor.Foreground = Brushes.White;
                     r = 0x80;
                     g = 0x80;
                     b = 0x80;                }
-                else if(value == "色は黒" || value == "いろはくろ")
+                else if(value.Contains("黒"))
                 {
                     mainWindow.bColor.Background = Brushes.Black;
                     mainWindow.bColor.Foreground = Brushes.White;
                     r = 0;
                     g = 0;
                     b = 0;}
-                else if(value == "色は白" || value == "いろはしろ")
+                else if(value.Contains("白"))
                 {
                     mainWindow.bColor.Background = Brushes.White;
                     mainWindow.bColor.Foreground = Brushes.Black;
@@ -194,7 +194,7 @@ namespace Speech02
     		if (mainWindow != null )
 	    	{
                 // "終了"　でアプリを閉じる
-                if(value == "終わり" || value == "終り" || value == "終了" || value == "おわり"){
+                if(value.Contains("終") || value.Contains("おわり")){
 	    		    mainWindow.Close();
                 }
             }
@@ -213,51 +213,51 @@ namespace Speech02
                     return;
                 }
                 mainWindow.bColor.Text = value;
-                if(value == "もっと大きく" || value == "もっと大き")
+                if(value.Contains("大"))
                 {
-                    mainWindow.rect.Width += 5;
-                    mainWindow.rect.Height += 5;
+                    mainWindow.rect.Width += 1;
+                    mainWindow.rect.Height += 1;
                 }
-                else if(value == "もっと小さく" || value == "もっと小さ")
+                else if(value.Contains("小"))
                 {
-                    mainWindow.rect.Width -= 5;
-                    mainWindow.rect.Height -= 5;
+                    mainWindow.rect.Width -= 1;
+                    mainWindow.rect.Height -= 1;
                 }
-                else if(value == "もっと広く" || value == "もっと広")
+                else if(value.Contains("広") || value.Contains("長"))
                 {
-                    mainWindow.rect.Width += 5;
+                    mainWindow.rect.Width += 1;
                 }
-                else if(value == "もっと狭く" || value == "もっと狭")
+                else if(Voice.Contains("狭") || Voice.Contains("短"))
                 {
-                    mainWindow.rect.Width -= 5;
+                    mainWindow.rect.Width -= 1;
                 }
-                else if(value == "もっと高く" || value == "もっと高")
+                else if(value.Contains("高"))
                 {
-                    mainWindow.rect.Height += 5;
+                    mainWindow.rect.Height += 1;
                 }
-                else if(value == "もっと低く" || value == "もっと低")
+                else if(value.Contains("低"))
                 {
-                    mainWindow.rect.Height -= 5;
+                    mainWindow.rect.Height -= 1;
                 }
-                else if(value == "もっと右" || value == "もっとみぎ")
+                else if(value.Contains("右"))
                 {
                     var left = Canvas.GetLeft(Target);
-                    Canvas.SetLeft(Target,left + 5);            
+                    Canvas.SetLeft(Target,left + 1);            
                 }
-                else if(value == "もっと左" || value == "もっとひだり")
+                else if(value.Contains("左"))
                 {
                     var left = Canvas.GetLeft(Target);
-                    Canvas.SetLeft(Target,left - 5);            
+                    Canvas.SetLeft(Target,left - 1);            
                 }
-                else if(value == "もっと上" || value == "もっとうえ")
+                else if(value.Contains("上") || value.Contains("うえ"))
                 {
                     var top = Canvas.GetTop(Target);
-                    Canvas.SetTop(Target,top - 5);            
+                    Canvas.SetTop(Target,top - 1);            
                 }
-                else if(value == "もっと下" || value == "もっとした")
+                else if( value.Contains("下") || value.Contains("した")) 
                 {
                     var top = Canvas.GetTop(Target);
-                    Canvas.SetTop(Target,top + 5);            
+                    Canvas.SetTop(Target,top + 1);            
                 }
                 else{
                     mainWindow.bColor.Text = "もっと～";
